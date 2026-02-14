@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Romanian (A0→A1) – sounds & baby steps</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; background:#f6f7f9; color:#111; }
+    header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
+    header h1 { margin:0 0 6px 0; font-size:18px; }
+    header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
+    main { max-width:1100px; margin:0 auto; padding:14px; display:grid; grid-template-columns:340px 1fr; gap:14px; }
+    .card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+    .pane { padding:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
+    .muted { color:#555; font-size:13px; line-height:1.4; }
+    .big { font-size:16px; line-height:1.4; }
+    .hr { height:1px; background:#e6e8ee; margin:12px 0; }
+
+    .lessonBtn {
+      width:100%; text-align:left; border:1px solid #e6e8ee; background:#fff;
+      border-radius:10px; padding:10px; cursor:pointer;
+    }
+    .lessonBtn:hover { background:#fafbff; }
+    .lessonBtn.active { border-color:#111; }
+
+    .q { padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
+    .q h3 { margin:0 0 8px 0; font-size:15px; }
+    .choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .choice { border:1px solid #e6e8ee; border-radius:10px; padding:10px; cursor:pointer; background:#fff; }
+    .choice:hover { background:#fafbff; }
+    .choice.selected { border-color:#111; }
+    .choice.correct { border-color:#0a7b34; background:#f0fff6; }
+    .choice.wrong { border-color:#b00020; background:#fff1f3; }
+
+    button {
+      border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
+      padding:10px 12px; cursor:pointer;
+    }
+    button.secondary { background:#fff; color:#111; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+
+    .grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:10px; }
+    .soundCard {
+      border:1px solid #e6e8ee; border-radius:12px; padding:10px; cursor:pointer; background:#fff;
+    }
+    .soundCard:hover { background:#fafbff; }
+    .soundBig { font-size:28px; font-weight:800; }
+    .soundHint { color:#555; font-size:12px; margin-top:6px; line-height:1.35; }
+
+    .builder { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chip { border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; }
+    .chip:hover { background:#fafbff; }
+    .output { margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff; font-size:16px; }
+    .feedback { margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
+    .ok { border-color:#0a7b34; background:#f0fff6; }
+    .bad { border-color:#b00020; background:#fff1f3; }
+
+    @media (max-width: 920px){ main{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Romanian from zero (English-first) – sounds → syllables → tiny sentences</h1>
+  <p>
+    Adult learner, child-style steps. Click <b>Speak</b> to hear Romanian (browser voice quality varies).
+    Everything is offline in one HTML file.
+  </p>
+</header>
+
+<main>
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <span class="tag">Level: A0 → A1</span>
+        <div class="muted" id="overall">Progress: 0/0</div>
+      </div>
+      <button class="secondary" id="resetBtn" title="Clear saved progress">Reset</button>
+    </div>
+    <div class="hr"></div>
+    <div class="muted">
+      Start with <b>Sounds</b>. Romanian is mostly “say what you see”, but a few letters matter a lot:
+      <b>ă â î ș ț</b>.
+    </div>
+    <div class="hr"></div>
+    <div id="lessonList"></div>
+  </section>
+
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="big" id="lessonTitle">Pick a lesson</div>
+        <div class="muted" id="lessonDesc"></div>
+      </div>
+      <div class="row">
+        <span class="tag" id="counter">0/0</span>
+        <button class="secondary" id="speakBtn" disabled>Speak</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+    <div id="stage"></div>
+    <div class="hr"></div>
+
+    <div class="muted">
+      Tip: If “Speak” sounds wrong, change your system voices or try another browser voice.
+      (This uses the built-in <b>SpeechSynthesis</b> API.)
+    </div>
+  </section>
+</main>
+
+<script>
+const LS_KEY = "ro_a0a1_sounds_v2";
+
+const LESSONS = [
+  {
+    id:"sounds",
+    title:"1) Core sounds: ă â î ș ț",
+    desc:"Click cards to learn the five letters that trip English speakers.",
+    kind:"cards",
+    cards:[
+      { glyph:"ă", romanian:"ă", say:"ă", hint:"Like a quick relaxed 'uh' (schwa). Example: «măr» = apple." },
+      { glyph:"â", romanian:"â", say:"â", hint:"Central vowel; not English. Similar-ish to Russian 'y'. Example: «mâine»." },
+      { glyph:"î", romanian:"î", say:"î", hint:"Same sound as â. Often at start/end of words: «în», «a iubi»." },
+      { glyph:"ș", romanian:"ș", say:"ș", hint:"Like 'sh' in 'ship'. Example: «școală»." },
+      { glyph:"ț", romanian:"ț", say:"ț", hint:"Like 'ts' in 'cats'. Example: «mulțumesc»." }
+    ]
+  },
+  {
+    id:"minimal_pairs",
+    title:"2) Hear & choose (minimal pairs)",
+    desc:"Train your ear: tiny spelling changes = different sound.",
+    kind:"quiz",
+    items:[
+      {
+        promptEN:"Pick the one with sound 'sh' (English 'ship').",
+        promptRO:"Which word uses «ș»?",
+        speak:"școală",
+        choices:["scoala","școală","scuolă"],
+        answer:1,
+        explainEN:"«ș» = 'sh'. Correct is «școală» (school)."
+      },
+      {
+        promptEN:"Pick the one that means 'thank you' (with «ț»).",
+        promptRO:"Which is correct Romanian spelling?",
+        speak:"mulțumesc",
+        choices:["multumesc","mulțumesc","mulsumesc"],
+        answer:1,
+        explainEN:"«ț» sounds like 'ts'. Correct: «mulțumesc»."
+      },
+      {
+        promptEN:"Pick the one with «ă» (schwa-like).",
+        promptRO:"Which has «ă»?",
+        speak:"măr",
+        choices:["mar","măr","mâR"],
+        answer:1,
+        explainEN:"«măr» = apple (with ă)."
+      },
+      {
+        promptEN:"Pick the correct 'tomorrow'.",
+        promptRO:"Choose the right spelling:",
+        speak:"mâine",
+        choices:["mîine","mâine","maine"],
+        answer:1,
+        explainEN:"Standard spelling: «mâine»."
+      }
+    ]
+  },
+  {
+    id:"syllables",
+    title:"3) Build syllables (ba, be, bi…) + read",
+    desc:"Click chips to build what you hear/see. Very child-style decoding.",
+    kind:"builder",
+    tasks:[
+      { target:"ma", speak:"ma", hintEN:"Like 'ma' in 'mama' (mom)." },
+      { target:"mi", speak:"mi", hintEN:"Like 'me' but shorter: «mi»." },
+      { target:"mă", speak:"mă", hintEN:"«mă» uses ă (uh). Common in speech." },
+      { target:"și", speak:"și", hintEN:"«și» = 'and'. Starts with 'sh'." },
+      { target:"țu", speak:"țu", hintEN:"Starts with 'ts'." }
+    ],
+    chips:["m","a","i","ă","ș","ț","u","e","o"]
+  },
+  {
+    id:"tiny_sentences",
+    title:"4) Tiny sentences: Eu sunt… / Eu am…",
+    desc:"First grammar, but still baby steps: ‘I am / I have’.",
+    kind:"quiz",
+    items:[
+      {
+        promptEN:"Complete: ‘I am’ = «Eu ____».",
+        promptRO:"Completează: Eu ____.",
+        speak:"Eu sunt",
+        choices:["este","sunt","ești"],
+        answer:1,
+        explainEN:"Eu sunt = I am."
+      },
+      {
+        promptEN:"Complete: ‘I have’ = «Eu ____».",
+        promptRO:"Completează: Eu ____ un pix.",
+        speak:"Eu am un pix",
+        choices:["am","ai","are"],
+        answer:0,
+        explainEN:"Eu am = I have."
+      },
+      {
+        promptEN:"Choose feminine article: ‘a (girl)’ =",
+        promptRO:"Alege: ___ fată",
+        speak:"o fată",
+        choices:["un","o"],
+        answer:1,
+        explainEN:"o + feminine noun → «o fată»."
+      }
+    ]
+  }
+];
+
+// --- state ---
+function defaultState(){
+  return { activeLessonId: LESSONS[0].id, indexByLesson:{}, correctByLesson:{}, attemptsByLesson:{} };
+}
+const state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return defaultState();
+    return { ...defaultState(), ...JSON.parse(raw) };
+  }catch{ return defaultState(); }
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+function reset(){
+  localStorage.removeItem(LS_KEY);
+  const fresh = defaultState();
+  Object.keys(state).forEach(k=>delete state[k]);
+  Object.assign(state, fresh);
+  renderAll();
+}
+document.getElementById("resetBtn").onclick = reset;
+
+function getIdx(lessonId){
+  if(state.indexByLesson[lessonId] == null) state.indexByLesson[lessonId] = 0;
+  return state.indexByLesson[lessonId];
+}
+function setIdx(lessonId, idx){ state.indexByLesson[lessonId]=idx; save(); }
+function incAttempt(lessonId){ state.attemptsByLesson[lessonId]=(state.attemptsByLesson[lessonId]||0)+1; save(); }
+function incCorrect(lessonId){ state.correctByLesson[lessonId]=(state.correctByLesson[lessonId]||0)+1; save(); }
+
+function totalProgress(){
+  let done=0,total=0;
+  for(const l of LESSONS){
+    const len = l.kind==="quiz" ? l.items.length : (l.kind==="builder" ? l.tasks.length : l.cards.length);
+    total += len;
+    done += Math.min(getIdx(l.id), len);
+  }
+  return {done,total};
+}
+
+// --- speech ---
+let chosenVoice = null;
+function pickVoice(){
+  const voices = speechSynthesis.getVoices();
+  // prefer Romanian, else fallback
+  chosenVoice = voices.find(v => (v.lang||"").toLowerCase().startsWith("ro")) || voices[0] || null;
+}
+speechSynthesis.onvoiceschanged = pickVoice;
+pickVoice();
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  if(chosenVoice) u.voice = chosenVoice;
+  u.lang = chosenVoice?.lang || "ro-RO";
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+// --- render lesson list ---
+function renderLessonList(){
+  const wrap = document.getElementById("lessonList");
+  wrap.innerHTML = "";
+  LESSONS.forEach(lesson=>{
+    const btn = document.createElement("button");
+    btn.className = "lessonBtn" + (lesson.id===state.activeLessonId ? " active":"");
+    const len = lesson.kind==="quiz" ? lesson.items.length : (lesson.kind==="builder" ? lesson.tasks.length : lesson.cards.length);
+    const idx = getIdx(lesson.id);
+    btn.innerHTML = `
+      <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+        <div>
+          <div style="font-weight:700; font-size:13px;">${esc(lesson.title)}</div>
+          <div style="color:#555; font-size:12px; margin-top:4px;">${esc(lesson.desc)}</div>
+        </div>
+        <div class="tag">${Math.min(idx,len)}/${len}</div>
+      </div>
+    `;
+    btn.onclick = ()=>{ state.activeLessonId=lesson.id; save(); renderAll(); };
+    wrap.appendChild(btn);
+  });
+
+  const {done,total} = totalProgress();
+  document.getElementById("overall").textContent = `Progress: ${done}/${total}`;
+}
+
+// --- render active lesson ---
+function renderActive(){
+  const lesson = LESSONS.find(l=>l.id===state.activeLessonId) || LESSONS[0];
+  document.getElementById("lessonTitle").textContent = lesson.title;
+  document.getElementById("lessonDesc").textContent = lesson.desc;
+
+  const speakBtn = document.getElementById("speakBtn");
+  speakBtn.disabled = true;
+  speakBtn.onclick = null;
+
+  const stage = document.getElementById("stage");
+  stage.innerHTML = "";
+
+  if(lesson.kind==="cards"){
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    lesson.cards.forEach(card=>{
+      const c = document.createElement("div");
+      c.className = "soundCard";
+      c.innerHTML = `
+        <div class="soundBig">${esc(card.glyph)}</div>
+        <div class="soundHint">${esc(card.hint)}</div>
+        <div class="row" style="margin-top:10px;">
+          <button class="secondary" type="button">Speak</button>
+        </div>
+      `;
+      c.querySelector("button").onclick = (e)=>{ e.stopPropagation(); speak(card.say); };
+      c.onclick = ()=> speak(card.say);
+      grid.appendChild(c);
+    });
+    stage.appendChild(grid);
+
+    const len = lesson.cards.length;
+    document.getElementById("counter").textContent = `cards: ${len}`;
+    return;
+  }
+
+  if(lesson.kind==="builder"){
+    const idx = getIdx(lesson.id);
+    const task = lesson.tasks[Math.min(idx, lesson.tasks.length-1)];
+    document.getElementById("counter").textContent = `${Math.min(idx, lesson.tasks.length)}/${lesson.tasks.length}`;
+
+    const q = document.createElement("div");
+    q.className = "q";
+    q.innerHTML = `
+      <h3>Build: <span class="tag">${esc(task.target)}</span></h3>
+      <div class="muted"><b>English hint:</b> ${esc(task.hintEN)}</div>
+      <div class="row" style="margin-top:10px;">
+        <button class="secondary" id="hearBtn">Hear target</button>
+        <button class="secondary" id="clearBtn">Clear</button>
+      </div>
+      <div class="builder" id="chips"></div>
+      <div class="output" id="out">(click chips to build)</div>
+      <div class="row" style="margin-top:12px;">
+        <button id="confirmBtn" disabled>Confirm</button>
+        <button class="secondary" id="skipBtn">Skip</button>
+      </div>
+      <div id="fb" style="display:none"></div>
+    `;
+    stage.appendChild(q);
+
+    const out = q.querySelector("#out");
+    const fb = q.querySelector("#fb");
+    const confirmBtn = q.querySelector("#confirmBtn");
+    let built = "";
+
+    q.querySelector("#hearBtn").onclick = ()=> speak(task.speak);
+    q.querySelector("#clearBtn").onclick = ()=>{ built=""; out.textContent=""; confirmBtn.disabled=true; fb.style.display="none"; };
+
+    const chipsWrap = q.querySelector("#chips");
+    lesson.chips.forEach(ch=>{
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.textContent = ch;
+      chip.onclick = ()=>{
+        built += ch;
+        out.textContent = built || "(empty)";
+        confirmBtn.disabled = built.length===0;
+      };
+      chipsWrap.appendChild(chip);
+    });
+
+    q.querySelector("#skipBtn").onclick = ()=>{
+      setIdx(lesson.id, idx+1);
+      renderAll();
+    };
+
+    confirmBtn.onclick = ()=>{
+      incAttempt(lesson.id);
+      const ok = normalize(built) === normalize(task.target);
+      if(ok) incCorrect(lesson.id);
+
+      fb.style.display = "block";
+      fb.className = "feedback " + (ok ? "ok":"bad");
+      fb.innerHTML = ok
+        ? `<b>✅ Nice!</b> You built <b>${esc(task.target)}</b>.`
+        : `<b>❌ Not quite.</b> Target was <b>${esc(task.target)}</b>. You built <b>${esc(built)}</b>.`;
+
+      confirmBtn.disabled = true;
+
+      const next = document.createElement("button");
+      next.textContent = "Continue";
+      next.onclick = ()=>{ setIdx(lesson.id, idx+1); renderAll(); };
+      q.querySelector(".row:last-of-type").appendChild(next);
+    };
+
+    // speak button in header
+    speakBtn.disabled = false;
+    speakBtn.onclick = ()=> speak(task.speak);
+    return;
+  }
+
+  // quiz
+  const idx = getIdx(lesson.id);
+  const item = lesson.items[idx];
+  const len = lesson.items.length;
+  document.getElementById("counter").textContent = `${Math.min(idx,len)}/${len}`;
+
+  if(idx >= len){
+    const score = state.correctByLesson[lesson.id]||0;
+    const att = state.attemptsByLesson[lesson.id]||0;
+    stage.innerHTML = `
+      <div class="q">
+        <h3>Finished: ${esc(lesson.title)}</h3>
+        <div class="muted">Correct: <b>${score}</b> | Attempts: <b>${att}</b></div>
+        <div class="hr"></div>
+        <div class="row">
+          <button class="secondary" id="redoBtn">Redo</button>
+          <button id="nextLessonBtn">Next lesson</button>
+        </div>
+      </div>
+    `;
+    stage.querySelector("#redoBtn").onclick = ()=>{
+      state.indexByLesson[lesson.id]=0; state.correctByLesson[lesson.id]=0; state.attemptsByLesson[lesson.id]=0; save(); renderAll();
+    };
+    stage.querySelector("#nextLessonBtn").onclick = ()=>{
+      const i = LESSONS.findIndex(l=>l.id===lesson.id);
+      state.activeLessonId = LESSONS[Math.min(i+1, LESSONS.length-1)].id;
+      save(); renderAll();
+    };
+    return;
+  }
+
+  const q = document.createElement("div");
+  q.className = "q";
+  q.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="row" style="margin-top:12px;">
+      <button id="confirmBtn" disabled>Confirm</button>
+      <button class="secondary" id="skipBtn">Skip</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  stage.appendChild(q);
+
+  const choicesWrap = q.querySelector("#choices");
+  const confirmBtn = q.querySelector("#confirmBtn");
+  const fb = q.querySelector("#fb");
+  let selected = null;
+
+  item.choices.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = c;
+    div.onclick = ()=>{
+      selected = i;
+      [...choicesWrap.children].forEach(x=>x.classList.remove("selected"));
+      div.classList.add("selected");
+      confirmBtn.disabled = false;
+    };
+    choicesWrap.appendChild(div);
+  });
+
+  q.querySelector("#skipBtn").onclick = ()=>{
+    setIdx(lesson.id, idx+1);
+    renderAll();
+  };
+
+  confirmBtn.onclick = ()=>{
+    incAttempt(lesson.id);
+    const ok = selected === item.answer;
+    if(ok) incCorrect(lesson.id);
+
+    const choiceEls = q.querySelectorAll(".choice");
+    choiceEls.forEach((node,i)=>{
+      node.style.pointerEvents="none";
+      node.classList.remove("selected");
+      if(i===item.answer) node.classList.add("correct");
+      if(i===selected && i!==item.answer) node.classList.add("wrong");
+    });
+
+    fb.style.display="block";
+    fb.className = "feedback " + (ok ? "ok":"bad");
+    fb.innerHTML = ok
+      ? `<b>✅ Correct.</b> ${esc(item.explainEN)}`
+      : `<b>❌ Not quite.</b> ${esc(item.explainEN)}`;
+
+    confirmBtn.disabled = true;
+    q.querySelector("#skipBtn").disabled = true;
+
+    const next = document.createElement("button");
+    next.textContent = "Continue";
+    next.onclick = ()=>{ setIdx(lesson.id, idx+1); renderAll(); };
+    q.querySelector(".row").appendChild(next);
+  };
+
+  // Speak button in header
+  document.getElementById("speakBtn").disabled = false;
+  document.getElementById("speakBtn").onclick = ()=> speak(item.speak);
+}
+
+function renderAll(){
+  renderLessonList();
+  renderActive();
+}
+function normalize(s){ return String(s||"").toLowerCase().replace(/\s+/g," ").trim(); }
+function esc(s){
+  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+renderAll();
+</script>
+</body>
+</html>

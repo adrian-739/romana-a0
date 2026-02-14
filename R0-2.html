@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Romanian A0→A1 – 10 modules (building blocks)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; background:#f6f7f9; color:#111; }
+    header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
+    header h1 { margin:0 0 6px 0; font-size:18px; }
+    header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
+    main { max-width:1200px; margin:0 auto; padding:14px; display:grid; grid-template-columns:360px 1fr; gap:14px; }
+    .card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+    .pane { padding:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
+    .muted { color:#555; font-size:13px; line-height:1.4; }
+    .big { font-size:16px; line-height:1.4; }
+    .hr { height:1px; background:#e6e8ee; margin:12px 0; }
+
+    .lessonBtn {
+      width:100%; text-align:left; border:1px solid #e6e8ee; background:#fff;
+      border-radius:10px; padding:10px; cursor:pointer;
+    }
+    .lessonBtn:hover { background:#fafbff; }
+    .lessonBtn.active { border-color:#111; }
+    .progressBar { margin-top:8px; height:6px; background:#f0f1f5; border-radius:999px; overflow:hidden; }
+    .progressBar > div { height:6px; background:#111; }
+
+    .panelTitle { font-weight:800; font-size:14px; }
+    .legend {
+      border:1px solid #e6e8ee; border-radius:12px; padding:12px; background:#fbfcff;
+    }
+    .legend h3 { margin:0 0 8px 0; font-size:15px; }
+    .legend ul { margin:8px 0 0 18px; padding:0; }
+    .legend li { margin:6px 0; }
+    .legend code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fff; border:1px solid #e6e8ee; border-radius:7px; padding:1px 6px; }
+
+    .q { padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
+    .q h3 { margin:0 0 8px 0; font-size:15px; }
+    .choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .choice { border:1px solid #e6e8ee; border-radius:10px; padding:10px; cursor:pointer; background:#fff; }
+    .choice:hover { background:#fafbff; }
+    .choice.selected { border-color:#111; }
+    .choice.correct { border-color:#0a7b34; background:#f0fff6; }
+    .choice.wrong { border-color:#b00020; background:#fff1f3; }
+
+    input[type="text"]{
+      border:1px solid #e6e8ee; border-radius:10px; padding:10px; width:min(560px,100%); font-size:14px;
+    }
+
+    .builder { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chip { border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; user-select:none; }
+    .chip:hover { background:#fafbff; }
+    .output { margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff; font-size:16px; min-height: 44px; }
+
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    button {
+      border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
+      padding:10px 12px; cursor:pointer;
+    }
+    button.secondary { background:#fff; color:#111; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+
+    .feedback { margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
+    .ok { border-color:#0a7b34; background:#f0fff6; }
+    .bad { border-color:#b00020; background:#fff1f3; }
+
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2px 6px; border: 1px solid #e6e8ee; border-radius: 7px; background:#fff; }
+    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Romanian A0→A1 (English-first) – 10 modules</h1>
+  <p>Child-style building blocks: each module has a fixed <b>Legend/Cheat-sheet</b> you can <b>Hide/Show</b>, then interactive practice with <b>Choose → Confirm → Feedback</b>.</p>
+</header>
+
+<main>
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <span class="tag">Offline • single HTML</span>
+        <div class="muted" id="overall">Progress: 0/0</div>
+      </div>
+      <button class="secondary" id="resetBtn" title="Clear saved progress">Reset</button>
+    </div>
+    <div class="hr"></div>
+    <div id="moduleList"></div>
+  </section>
+
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="big" id="moduleTitle">Pick a module</div>
+        <div class="muted" id="moduleDesc"></div>
+      </div>
+      <div class="row">
+        <span class="tag" id="counter">0/0</span>
+        <button class="secondary" id="toggleLegendBtn" disabled>Hide legend</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="legendWrap"></div>
+
+    <div class="hr"></div>
+
+    <div id="practiceWrap"></div>
+
+    <div class="hr"></div>
+    <div class="muted">Tip: For text answers you can press <span class="kbd">Enter</span> to confirm once enabled.</div>
+  </section>
+</main>
+
+<script>
+const LS_KEY = "ro_modules_a0a1_v1";
+
+/**
+ * Item types:
+ * - mcq: {type, promptEN, promptRO, choices[], answerIndex, explainEN}
+ * - cloze: {type, promptEN, promptRO, answerText, explainEN}
+ * - build: {type, promptEN, promptRO, bank[], answerText, explainEN}
+ */
+const MODULES = [
+  {
+    id:"m1",
+    title:"1) Hello + ‘I am…’ (pronouns + a fi)",
+    desc:"Eu/tu + sunt/ești, names, greeting. First tiny statements + yes/no question.",
+    legend: [
+      ["Pronouns", "<code>eu</code> = I, <code>tu</code> = you (singular)."],
+      ["‘to be’ (a fi)", "<code>eu sunt</code> = I am, <code>tu ești</code> = you are, <code>el/ea este</code> = he/she is."],
+      ["Patterns", "<code>Eu sunt Ana.</code> / <code>Tu ești Adrian?</code>"],
+      ["Greetings", "<code>Bună!</code> (hi) • <code>Bună ziua!</code> (hello, polite) • <code>La revedere!</code> (goodbye)"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose the correct: ‘I am’ =",
+        promptRO:"Alege corect: ‘I am’ =",
+        choices:["Eu ești","Eu sunt","Eu este"],
+        answerIndex:1,
+        explainEN:"‘I am’ → <b>Eu sunt</b>."
+      },
+      { type:"cloze",
+        promptEN:"Fill the blank: ‘My name is Ana.’ → «Eu mă ____ Ana.»",
+        promptRO:"Completează: «Eu mă ____ Ana.»",
+        answerText:"numesc",
+        explainEN:"Common pattern: <b>Eu mă numesc …</b> (My name is …)."
+      },
+      { type:"mcq",
+        promptEN:"Pick the polite greeting (more formal):",
+        promptRO:"Alege salutul politicos:",
+        choices:["Bună!","Bună ziua!","Pa!"],
+        answerIndex:1,
+        explainEN:"More formal/polite: <b>Bună ziua!</b>"
+      },
+      { type:"build",
+        promptEN:"Build: ‘You are Adrian.’",
+        promptRO:"Construiește: «Tu ești Adrian.»",
+        bank:["Tu","ești","este","sunt","Adrian","Ana","."],
+        answerText:"Tu ești Adrian.",
+        explainEN:"Use <b>tu ești</b> for ‘you are’ (singular)."
+      }
+    ]
+  },
+  {
+    id:"m2",
+    title:"2) ‘I have…’ (a avea) + objects",
+    desc:"am/ai/are + un/o. Talk about having things. (Optional: age with a avea).",
+    legend: [
+      ["‘to have’ (a avea)", "<code>eu am</code> = I have • <code>tu ai</code> = you have • <code>el/ea are</code> = he/she has."],
+      ["Articles", "<code>un</code> (a, masculine) • <code>o</code> (a, feminine)."],
+      ["Pattern", "<code>Eu am un pix.</code> / <code>Tu ai o carte?</code>"],
+      ["Age (common)", "<code>Câți ani ai?</code> = How old are you? (literally: How many years do you have?)"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘I have’ =",
+        promptRO:"Alege: ‘I have’ =",
+        choices:["Eu am","Eu ai","Eu are"],
+        answerIndex:0,
+        explainEN:"‘I have’ → <b>Eu am</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose the correct: ‘You (singular) have’ =",
+        promptRO:"Alege: ‘You have’ (tu) =",
+        choices:["tu are","tu ai","tu am"],
+        answerIndex:1,
+        explainEN:"‘You have’ (singular) → <b>tu ai</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘I have a book.’",
+        promptRO:"Construiește: «Eu am o carte.»",
+        bank:["Eu","am","ai","o","un","carte","pix","."],
+        answerText:"Eu am o carte.",
+        explainEN:"‘carte’ is feminine → use <b>o</b>."
+      },
+      { type:"cloze",
+        promptEN:"Fill: «Câți ani ____?» (How old are you?)",
+        promptRO:"Completează: «Câți ani ____?»",
+        answerText:"ai",
+        explainEN:"Age uses <b>a avea</b>: <b>Câți ani ai?</b>"
+      }
+    ]
+  },
+  {
+    id:"m3",
+    title:"3) Articles + gender (un/o) + simple plurals",
+    desc:"un/o + basic nouns. Tiny plural intro (no deep rules, just examples).",
+    legend: [
+      ["un / o", "<code>un</code> + masculine noun • <code>o</code> + feminine noun."],
+      ["Examples", "<code>un băiat</code> (a boy) • <code>o fată</code> (a girl) • <code>o carte</code> (a book)"],
+      ["Plural (intro)", "Some easy ones: <code>o carte</code> → <code>două cărți</code>; <code>un băiat</code> → <code>doi băieți</code>."],
+      ["Goal", "Don’t memorize rules yet. Learn chunks."]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘a girl’ =",
+        promptRO:"Alege: ‘o fată’ =",
+        choices:["un fată","o fată","un fata"],
+        answerIndex:1,
+        explainEN:"Correct: <b>o fată</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose: ‘a boy’ =",
+        promptRO:"Alege: ‘un băiat’ =",
+        choices:["o băiat","un băiat","un fată"],
+        answerIndex:1,
+        explainEN:"Correct: <b>un băiat</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘Two books.’",
+        promptRO:"Construiește: «două cărți.»",
+        bank:["două","doi","cărți","carte","băieți","."],
+        answerText:"două cărți.",
+        explainEN:"Chunk: <b>două cărți</b>."
+      }
+    ]
+  },
+  {
+    id:"m4",
+    title:"4) Negation + yes/no questions",
+    desc:"nu + basic order. Short answers: da/nu. Questions with ‘?’",
+    legend: [
+      ["Negation", "<code>nu</code> goes before the verb: <code>Nu sunt…</code> / <code>Nu am…</code>."],
+      ["Yes/No", "<code>Da.</code> = Yes • <code>Nu.</code> = No."],
+      ["Question", "Often just intonation or <code>?</code>: <code>Ești student?</code> / <code>Ai o carte?</code>"],
+      ["Short replies", "<code>Da, sunt.</code> / <code>Nu, nu sunt.</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose correct negation: ‘I am not’ =",
+        promptRO:"Alege negația corectă: ‘I am not’ =",
+        choices:["Nu sunt","Sunt nu","Nu este"],
+        answerIndex:0,
+        explainEN:"Negation: <b>Nu sunt</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘No, I am not.’",
+        promptRO:"Construiește: «Nu, nu sunt.»",
+        bank:["Nu,","nu","sunt","este","am","."],
+        answerText:"Nu, nu sunt.",
+        explainEN:"Common: <b>Nu, nu sunt.</b>"
+      },
+      { type:"cloze",
+        promptEN:"Fill: «Ai o carte?» — «Da, _____.»",
+        promptRO:"Completează: «Ai o carte?» — «Da, _____.»",
+        answerText:"am",
+        explainEN:"Short answer mirrors the verb: <b>Da, am.</b>"
+      }
+    ]
+  },
+  {
+    id:"m5",
+    title:"5) WH questions (cine/ce/unde/când/cum)",
+    desc:"Simple info questions: who/what/where/when/how + short answers.",
+    legend: [
+      ["cine", "who"],
+      ["ce", "what"],
+      ["unde", "where"],
+      ["când", "when"],
+      ["cum", "how"],
+      ["Examples", "<code>Cine ești?</code> • <code>Ce ai?</code> • <code>Unde e cartea?</code> • <code>Când?</code> • <code>Cum ești?</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘Where?’ =",
+        promptRO:"Alege: ‘Where?’ =",
+        choices:["ce","unde","cine"],
+        answerIndex:1,
+        explainEN:"Where = <b>unde</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose: ‘Who?’ =",
+        promptRO:"Alege: ‘Who?’ =",
+        choices:["cine","cum","când"],
+        answerIndex:0,
+        explainEN:"Who = <b>cine</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘Where is the book?’ (very basic)",
+        promptRO:"Construiește: «Unde e cartea?»",
+        bank:["Unde","e","este","cartea","carte","?"],
+        answerText:"Unde e cartea?",
+        explainEN:"In speech, <b>e</b> is often used for <b>este</b>."
+      }
+    ]
+  },
+  {
+    id:"m6",
+    title:"6) Connectors: și / sau / dar",
+    desc:"Link two simple ideas: and/or/but. Keep sentences short.",
+    legend: [
+      ["și", "and"],
+      ["sau", "or"],
+      ["dar", "but"],
+      ["Examples", "<code>Eu sunt Ana și tu ești Adrian.</code> • <code>Vrei ceai sau cafea?</code> • <code>Eu vreau, dar nu am.</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘and’ =",
+        promptRO:"Alege: ‘and’ =",
+        choices:["și","sau","dar"],
+        answerIndex:0,
+        explainEN:"and = <b>și</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose: ‘or’ =",
+        promptRO:"Alege: ‘or’ =",
+        choices:["și","sau","dar"],
+        answerIndex:1,
+        explainEN:"or = <b>sau</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘Tea or coffee?’",
+        promptRO:"Construiește: «Ceai sau cafea?»",
+        bank:["Ceai","și","sau","cafea","?"],
+        answerText:"Ceai sau cafea?",
+        explainEN:"Simple choice pattern: <b>X sau Y?</b>"
+      }
+    ]
+  },
+  {
+    id:"m7",
+    title:"7) Prepositions: în / la / pe / cu / din",
+    desc:"Location & simple relations: in/to/at/on/with/from (approximate meanings).",
+    legend: [
+      ["în", "in (în casă = in the house); also ‘into’ sometimes."],
+      ["la", "at/to (la școală = at school / to school)"],
+      ["pe", "on (pe masă = on the table)"],
+      ["cu", "with (cu Ana = with Ana)"],
+      ["din", "from/out of (din România = from Romania)"],
+      ["Examples", "<code>Sunt în casă.</code> • <code>Merg la școală.</code> • <code>Cartea e pe masă.</code> • <code>Vin din România.</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘with’ =",
+        promptRO:"Alege: ‘with’ =",
+        choices:["din","cu","pe"],
+        answerIndex:1,
+        explainEN:"with = <b>cu</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘I am from Romania.’",
+        promptRO:"Construiește: «Sunt din România.»",
+        bank:["Sunt","din","în","România",".","la"],
+        answerText:"Sunt din România.",
+        explainEN:"From = <b>din</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose the best: ‘on the table’ =",
+        promptRO:"Alege: ‘pe masă’ =",
+        choices:["în masă","pe masă","din masă"],
+        answerIndex:1,
+        explainEN:"On = <b>pe</b> → <b>pe masă</b>."
+      }
+    ]
+  },
+  {
+    id:"m8",
+    title:"8) Everyday verbs (present): vreau / merg / vin / iau",
+    desc:"Four super-common verbs. Start with eu/tu (I/you).",
+    legend: [
+      ["a vrea", "<code>eu vreau</code> = I want • <code>tu vrei</code> = you want"],
+      ["a merge", "<code>eu merg</code> = I go • <code>tu mergi</code> = you go"],
+      ["a veni", "<code>eu vin</code> = I come • <code>tu vii</code> = you come"],
+      ["a lua", "<code>eu iau</code> = I take • <code>tu iei</code> = you take"],
+      ["Patterns", "<code>Vreau apă.</code> • <code>Merg la…</code> • <code>Vin cu…</code> • <code>Iau o carte.</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘I want’ =",
+        promptRO:"Alege: ‘I want’ =",
+        choices:["Eu vreau","Eu vrei","Eu merg"],
+        answerIndex:0,
+        explainEN:"I want = <b>Eu vreau</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose: ‘You (tu) go’ =",
+        promptRO:"Alege: ‘Tu go’ =",
+        choices:["tu mergi","tu merg","tu vine"],
+        answerIndex:0,
+        explainEN:"You go (tu) = <b>tu mergi</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘I go to school.’",
+        promptRO:"Construiește: «Merg la școală.»",
+        bank:["Merg","mergi","la","în","școală",".","Eu"],
+        answerText:"Merg la școală.",
+        explainEN:"Common: <b>Merg la…</b>"
+      }
+    ]
+  },
+  {
+    id:"m9",
+    title:"9) Time basics: azi/mâine + ora + când?",
+    desc:"Survival time: today/tomorrow, simple hours, asking ‘when?’",
+    legend: [
+      ["azi / astăzi", "today"],
+      ["mâine", "tomorrow"],
+      ["ieri", "yesterday (optional)"],
+      ["când?", "when?"],
+      ["la ora…", "at (the) hour… → <code>la ora 7</code>"],
+      ["Examples", "<code>Mâine la ora 7.</code> • <code>Când?</code> • <code>Azi.</code>"]
+    ],
+    items: [
+      { type:"mcq",
+        promptEN:"Choose: ‘tomorrow’ =",
+        promptRO:"Alege: ‘tomorrow’ =",
+        choices:["ieri","mâine","azi"],
+        answerIndex:1,
+        explainEN:"tomorrow = <b>mâine</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘Tomorrow at 7.’",
+        promptRO:"Construiește: «Mâine la ora 7.»",
+        bank:["Mâine","azi","la","ora","7",".","când"],
+        answerText:"Mâine la ora 7.",
+        explainEN:"Chunk: <b>la ora 7</b>."
+      },
+      { type:"mcq",
+        promptEN:"Choose: ‘When?’ =",
+        promptRO:"Alege: ‘When?’ =",
+        choices:["unde?","când?","cum?"],
+        answerIndex:1,
+        explainEN:"When = <b>când?</b>"
+      }
+    ]
+  },
+  {
+    id:"m10",
+    title:"10) Mini scenarios: café / shop / directions (very light)",
+    desc:"Use what you already have: greetings, want/have, where, please/thanks.",
+    legend: [
+      ["Please / Thanks", "<code>vă rog</code> = please • <code>mulțumesc</code> = thank you"],
+      ["Ordering", "<code>Vreau o cafea, vă rog.</code>"],
+      ["Shop", "<code>Ai apă?</code> / <code>Am apă.</code>"],
+      ["Directions (light)", "<code>Unde e…?</code> / <code>E aici.</code> / <code>E la…</code>"],
+      ["Goal", "Short, usable chunks. Don’t overthink grammar."]
+    ],
+    items: [
+      { type:"build",
+        promptEN:"Build: ‘I want a coffee, please.’",
+        promptRO:"Construiește: «Vreau o cafea, vă rog.»",
+        bank:["Vreau","o","un","cafea,","vă","rog",".","Mulțumesc"],
+        answerText:"Vreau o cafea, vă rog.",
+        explainEN:"Super common survival sentence."
+      },
+      { type:"mcq",
+        promptEN:"Pick ‘thank you’:",
+        promptRO:"Alege ‘mulțumesc’:",
+        choices:["mulțumesc","la revedere","bună ziua"],
+        answerIndex:0,
+        explainEN:"thank you = <b>mulțumesc</b>."
+      },
+      { type:"build",
+        promptEN:"Build: ‘Where is the café?’ (basic)",
+        promptRO:"Construiește: «Unde e cafeneaua?»",
+        bank:["Unde","e","cafeneaua","cafeaua","?","este"],
+        answerText:"Unde e cafeneaua?",
+        explainEN:"Basic directions starter: <b>Unde e …?</b>"
+      }
+    ]
+  }
+];
+
+// ---------- state ----------
+function defaultState(){
+  return {
+    activeModuleId: MODULES[0].id,
+    idxByModule: {},
+    correctByModule: {},
+    attemptsByModule: {},
+    legendHiddenByModule: {}
+  };
+}
+const state = loadState();
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return defaultState();
+    return { ...defaultState(), ...JSON.parse(raw) };
+  }catch{ return defaultState(); }
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+function reset(){
+  localStorage.removeItem(LS_KEY);
+  const fresh = defaultState();
+  Object.keys(state).forEach(k=>delete state[k]);
+  Object.assign(state, fresh);
+  renderAll();
+}
+document.getElementById("resetBtn").onclick = reset;
+
+function getIdx(mid){
+  if(state.idxByModule[mid] == null) state.idxByModule[mid] = 0;
+  return state.idxByModule[mid];
+}
+function setIdx(mid, idx){ state.idxByModule[mid]=idx; save(); }
+function incAttempt(mid){ state.attemptsByModule[mid]=(state.attemptsByModule[mid]||0)+1; save(); }
+function incCorrect(mid){ state.correctByModule[mid]=(state.correctByModule[mid]||0)+1; save(); }
+
+function totalProgress(){
+  let done=0,total=0;
+  for(const m of MODULES){
+    total += m.items.length;
+    done += Math.min(getIdx(m.id), m.items.length);
+  }
+  return {done,total};
+}
+
+function esc(s){
+  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function normalize(s){
+  return String(s||"").replace(/\s+/g," ").trim();
+}
+
+// ---------- render left menu ----------
+function renderModuleList(){
+  const wrap = document.getElementById("moduleList");
+  wrap.innerHTML = "";
+  MODULES.forEach(m=>{
+    const idx = getIdx(m.id);
+    const pct = Math.round((idx / m.items.length) * 100);
+    const btn = document.createElement("button");
+    btn.className = "lessonBtn" + (m.id===state.activeModuleId ? " active":"");
+    btn.innerHTML = `
+      <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+        <div>
+          <div style="font-weight:800; font-size:13px;">${esc(m.title)}</div>
+          <div style="color:#555; font-size:12px; margin-top:4px;">${esc(m.desc)}</div>
+        </div>
+        <div class="tag">${Math.min(idx,m.items.length)}/${m.items.length}</div>
+      </div>
+      <div class="progressBar"><div style="width:${pct}%;"></div></div>
+    `;
+    btn.onclick = ()=>{ state.activeModuleId=m.id; save(); renderAll(); };
+    wrap.appendChild(btn);
+  });
+
+  const {done,total} = totalProgress();
+  document.getElementById("overall").textContent = `Progress: ${done}/${total}`;
+}
+
+// ---------- render right panel ----------
+function activeModule(){
+  return MODULES.find(x=>x.id===state.activeModuleId) || MODULES[0];
+}
+
+function renderHeader(){
+  const m = activeModule();
+  document.getElementById("moduleTitle").textContent = m.title;
+  document.getElementById("moduleDesc").textContent = m.desc;
+
+  const idx = getIdx(m.id);
+  document.getElementById("counter").textContent = `${Math.min(idx,m.items.length)}/${m.items.length}`;
+
+  const toggleBtn = document.getElementById("toggleLegendBtn");
+  toggleBtn.disabled = false;
+  const hidden = !!state.legendHiddenByModule[m.id];
+  toggleBtn.textContent = hidden ? "Show legend" : "Hide legend";
+  toggleBtn.onclick = ()=>{
+    state.legendHiddenByModule[m.id] = !state.legendHiddenByModule[m.id];
+    save();
+    renderLegend();
+  };
+}
+
+function renderLegend(){
+  const m = activeModule();
+  const hidden = !!state.legendHiddenByModule[m.id];
+  const wrap = document.getElementById("legendWrap");
+  wrap.innerHTML = "";
+
+  if(hidden) return;
+
+  const box = document.createElement("div");
+  box.className = "legend";
+  const lines = m.legend.map(([k,v]) => `<li><b>${k}:</b> ${v}</li>`).join("");
+  box.innerHTML = `
+    <h3>Legend / Cheat-sheet</h3>
+    <div class="muted">Keep this open while you practice. You can hide it any time.</div>
+    <ul>${lines}</ul>
+  `;
+  wrap.appendChild(box);
+}
+
+function renderPractice(){
+  const m = activeModule();
+  const idx = getIdx(m.id);
+  const wrap = document.getElementById("practiceWrap");
+  wrap.innerHTML = "";
+
+  if(idx >= m.items.length){
+    const score = state.correctByModule[m.id]||0;
+    const att = state.attemptsByModule[m.id]||0;
+    const box = document.createElement("div");
+    box.className = "q";
+    box.innerHTML = `
+      <h3>Finished: ${esc(m.title)}</h3>
+      <div class="muted">Correct: <b>${score}</b> • Attempts: <b>${att}</b></div>
+      <div class="hr"></div>
+      <div class="actions">
+        <button class="secondary" id="redoBtn">Redo module</button>
+        <button id="nextBtn">Next module</button>
+      </div>
+    `;
+    wrap.appendChild(box);
+
+    box.querySelector("#redoBtn").onclick = ()=>{
+      state.idxByModule[m.id]=0;
+      state.correctByModule[m.id]=0;
+      state.attemptsByModule[m.id]=0;
+      save();
+      renderAll();
+    };
+    box.querySelector("#nextBtn").onclick = ()=>{
+      const i = MODULES.findIndex(x=>x.id===m.id);
+      state.activeModuleId = MODULES[Math.min(i+1, MODULES.length-1)].id;
+      save();
+      renderAll();
+    };
+    return;
+  }
+
+  const item = m.items[idx];
+  if(item.type === "mcq") renderMCQ(m, idx, item, wrap);
+  if(item.type === "cloze") renderCloze(m, idx, item, wrap);
+  if(item.type === "build") renderBuild(m, idx, item, wrap);
+}
+
+function addContinueRow(container, onContinue){
+  const actions = document.createElement("div");
+  actions.className = "actions";
+  const cont = document.createElement("button");
+  cont.textContent = "Continue";
+  cont.onclick = onContinue;
+  actions.appendChild(cont);
+
+  const skip = document.createElement("button");
+  skip.className = "secondary";
+  skip.textContent = "Skip";
+  skip.onclick = ()=>{
+    setIdx(activeModule().id, getIdx(activeModule().id) + 1);
+    renderAll();
+  };
+  actions.appendChild(skip);
+
+  container.appendChild(actions);
+}
+
+function renderFeedback(node, ok, html){
+  node.style.display = "block";
+  node.className = "feedback " + (ok ? "ok":"bad");
+  node.innerHTML = (ok ? "<b>✅ Correct.</b> " : "<b>❌ Not quite.</b> ") + html;
+}
+
+function renderMCQ(mod, idx, item, wrap){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="actions">
+      <button id="confirmBtn" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const choicesWrap = box.querySelector("#choices");
+  const confirmBtn = box.querySelector("#confirmBtn");
+  const fb = box.querySelector("#fb");
+  let selected = null;
+
+  item.choices.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = c;
+    div.onclick = ()=>{
+      selected = i;
+      [...choicesWrap.children].forEach(x=>x.classList.remove("selected"));
+      div.classList.add("selected");
+      confirmBtn.disabled = false;
+    };
+    choicesWrap.appendChild(div);
+  });
+
+  addContinueRow(box, ()=>{ setIdx(mod.id, idx+1); renderAll(); });
+
+  confirmBtn.onclick = ()=>{
+    incAttempt(mod.id);
+    const ok = selected === item.answerIndex;
+    if(ok) incCorrect(mod.id);
+
+    const els = box.querySelectorAll(".choice");
+    els.forEach((node,i)=>{
+      node.style.pointerEvents = "none";
+      node.classList.remove("selected");
+      if(i === item.answerIndex) node.classList.add("correct");
+      if(i === selected && i !== item.answerIndex) node.classList.add("wrong");
+    });
+
+    renderFeedback(fb, ok, item.explainEN || "");
+    confirmBtn.disabled = true;
+  };
+}
+
+function renderCloze(mod, idx, item, wrap){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div style="margin-top:10px;">
+      <input id="inp" type="text" placeholder="Type the missing word…" />
+    </div>
+    <div class="actions">
+      <button id="confirmBtn" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const inp = box.querySelector("#inp");
+  const confirmBtn = box.querySelector("#confirmBtn");
+  const fb = box.querySelector("#fb");
+
+  inp.oninput = ()=>{
+    confirmBtn.disabled = normalize(inp.value).length === 0;
+  };
+  inp.onkeydown = (e)=>{
+    if(e.key === "Enter" && !confirmBtn.disabled) confirmBtn.click();
+  };
+  setTimeout(()=>inp.focus(), 50);
+
+  addContinueRow(box, ()=>{ setIdx(mod.id, idx+1); renderAll(); });
+
+  confirmBtn.onclick = ()=>{
+    incAttempt(mod.id);
+    const user = normalize(inp.value);
+    const ans = normalize(item.answerText);
+    const ok = user.toLowerCase() === ans.toLowerCase();
+    if(ok) incCorrect(mod.id);
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Answer: <b>${esc(item.answerText)}</b>. You typed: <b>${esc(inp.value)}</b>.`);
+    renderFeedback(fb, ok, extra);
+
+    confirmBtn.disabled = true;
+    inp.disabled = true;
+  };
+}
+
+function renderBuild(mod, idx, item, wrap){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+
+    <div class="builder" id="bank"></div>
+    <div class="output" id="out">(click blocks to build a sentence)</div>
+
+    <div class="actions">
+      <button class="secondary" id="clearBtn">Clear</button>
+      <button id="confirmBtn" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const bank = box.querySelector("#bank");
+  const out = box.querySelector("#out");
+  const clearBtn = box.querySelector("#clearBtn");
+  const confirmBtn = box.querySelector("#confirmBtn");
+  const fb = box.querySelector("#fb");
+
+  let built = "";
+
+  function refresh(){
+    out.textContent = built || "(empty)";
+    confirmBtn.disabled = normalize(built).length === 0;
+  }
+
+  item.bank.forEach(tok=>{
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = tok;
+    chip.onclick = ()=>{
+      // spacing rules: naive but works for these early modules
+      if(built.length === 0) built = tok;
+      else if(tok === "." || tok === "?" || tok === "!" || tok.endsWith(","))
+        built = built.trimEnd() + tok; // punctuation stick to previous
+      else
+        built = built + " " + tok;
+      refresh();
+    };
+    bank.appendChild(chip);
+  });
+
+  clearBtn.onclick = ()=>{
+    built = "";
+    fb.style.display = "none";
+    refresh();
+  };
+
+  addContinueRow(box, ()=>{ setIdx(mod.id, idx+1); renderAll(); });
+
+  confirmBtn.onclick = ()=>{
+    incAttempt(mod.id);
+    const ok = normalize(built) === normalize(item.answerText);
+    if(ok) incCorrect(mod.id);
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Target: <b>${esc(item.answerText)}</b>. You built: <b>${esc(built)}</b>.`);
+    renderFeedback(fb, ok, extra);
+
+    confirmBtn.disabled = true;
+    // lock chips
+    [...bank.children].forEach(c=>c.style.pointerEvents="none");
+  };
+
+  refresh();
+}
+
+// ---------- main render ----------
+function renderAll(){
+  renderModuleList();
+  renderHeader();
+  renderLegend();
+  renderPractice();
+}
+
+renderAll();
+</script>
+</body>
+</html>
