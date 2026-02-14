@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Post-Chapter 1 — Practice (Discover Romanian)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; background:#f6f7f9; color:#111; }
+    header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
+    header h1 { margin:0 0 6px 0; font-size:18px; }
+    header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
+
+    main { max-width:1100px; margin:0 auto; padding:14px; display:grid; grid-template-columns:420px 1fr; gap:14px; }
+    .card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+    .pane { padding:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
+    .muted { color:#555; font-size:13px; line-height:1.4; }
+    .big { font-size:16px; line-height:1.4; }
+    .hr { height:1px; background:#e6e8ee; margin:12px 0; }
+
+    button{
+      border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
+      padding:10px 12px; cursor:pointer;
+    }
+    button.secondary{ background:#fff; color:#111; }
+    button:disabled{ opacity:.5; cursor:not-allowed; }
+
+    .legend{
+      border:1px solid #e6e8ee; border-radius:12px; padding:12px; background:#fbfcff;
+    }
+    .legend h3 { margin:0 0 8px 0; font-size:15px; }
+    .legend ul { margin:8px 0 0 18px; padding:0; }
+    .legend li { margin:7px 0; }
+    .legend code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fff; border:1px solid #e6e8ee; border-radius:7px; padding:1px 6px; }
+
+    .q{ padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
+    .q h3 { margin:0 0 8px 0; font-size:15px; }
+    .choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .choice { border:1px solid #e6e8ee; border-radius:10px; padding:10px; cursor:pointer; background:#fff; }
+    .choice:hover { background:#fafbff; }
+    .choice.selected { border-color:#111; }
+    .choice.correct { border-color:#0a7b34; background:#f0fff6; }
+    .choice.wrong { border-color:#b00020; background:#fff1f3; }
+
+    input[type="text"]{
+      border:1px solid #e6e8ee; border-radius:10px; padding:10px; width:min(780px,100%); font-size:14px;
+    }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .feedback{ margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
+    .ok { border-color:#0a7b34; background:#f0fff6; }
+    .bad { border-color:#b00020; background:#fff1f3; }
+
+    .bank{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chip{ border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; user-select:none; }
+    .chip:hover { background:#fafbff; }
+    .output{
+      margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff;
+      font-size:16px; min-height:44px;
+    }
+
+    .miniTable{
+      width:100%; border-collapse:collapse; margin-top:8px; font-size:13px;
+    }
+    .miniTable td, .miniTable th{ border:1px solid #e6e8ee; padding:6px 8px; text-align:left; }
+    .miniTable th{ background:#fbfcff; }
+
+    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Post-Chapter 1 — Practice (Discover Romanian)</h1>
+  <p>
+    Mirrors Chapter 1 work: A/B verb agreement (<b>a fi</b>), C occupations, D Q&A (“Noroc, Radu!”),
+    plus <b>Unde-i / De unde-i</b> and <b>nationalities</b>.
+  </p>
+</header>
+
+<main>
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <span class="tag">Chapter 1 • practice set</span>
+        <div class="muted" id="progress">Progress: 0/0</div>
+      </div>
+      <div class="row">
+        <button class="secondary" id="toggleLegendBtn">Hide legend</button>
+        <button class="secondary" id="resetBtn" title="Clear saved progress">Reset</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="legend" id="legendBox">
+      <h3>Legend (quick)</h3>
+      <ul>
+        <li><b>a fi</b> present:
+          <code>eu sunt</code> • <code>tu/dta ești</code> • <code>el/ea este/e</code> •
+          <code>noi suntem</code> • <code>voi/dv sunteți</code> • <code>ei/ele sunt</code>
+        </li>
+        <li><b>Negation</b>: <code>nu</code> goes before the verb: <code>Nu sunt…</code> / <code>Nu e…</code></li>
+        <li><b>Occupations</b>: usually no article: <code>Sunt student.</code></li>
+        <li><b>Question words</b>: <code>unde?</code> where • <code>de unde?</code> from where • <code>cine?</code> who • <code>ce?</code> what • <code>cum?</code> how</li>
+        <li><b>Short form</b>: <code>este</code> → <code>e</code>, sometimes <code>Unde-i…?</code> / <code>Cine-i…?</code></li>
+      </ul>
+      <div class="muted" style="margin-top:10px;">
+        Same flow: choose/build/type → <b>Confirm</b> → feedback → Continue.
+      </div>
+    </div>
+  </section>
+
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="big" id="title">Practice</div>
+        <div class="muted" id="subtitle">Post-Chapter 1</div>
+      </div>
+      <span class="tag" id="counter">0/0</span>
+    </div>
+
+    <div class="hr"></div>
+    <div id="practice"></div>
+  </section>
+</main>
+
+<script>
+const LS_KEY = "ro_postchapter1_v1";
+
+function normalize(s){ return String(s||"").replace(/\s+/g," ").trim(); }
+function esc(s){
+  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+                  .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function eqLoose(a,b){ return normalize(a).toLowerCase() === normalize(b).toLowerCase(); }
+
+const ITEMS = [
+  // --- Exercise A: (Eu) sunt aici în clasă. Change verb form for subject.
+  { type:"mcq", id:"A1",
+    promptEN:"Exercise A — choose the right verb form: (tu) ___ aici în clasă.",
+    promptRO:"Exercițiul A — alege forma corectă: (tu) ___ aici în clasă.",
+    choices:["sunt","ești","suntem"],
+    answerIndex:1,
+    explainEN:"tu → <b>ești</b>."
+  },
+  { type:"mcq", id:"A2",
+    promptEN:"Exercise A — (dumneata) ___ aici în clasă.",
+    promptRO:"Exercițiul A — (dumneata) ___ aici în clasă.",
+    choices:["ești","sunteți","este"],
+    answerIndex:0,
+    explainEN:"dumneata uses the singular verb like tu: <b>ești</b>."
+  },
+  { type:"mcq", id:"A3",
+    promptEN:"Exercise A — (el) ___ aici în clasă.",
+    promptRO:"Exercițiul A — (el) ___ aici în clasă.",
+    choices:["este / e","ești","sunt"],
+    answerIndex:0,
+    explainEN:"el/ea → <b>este</b> (or short <b>e</b>)."
+  },
+  { type:"mcq", id:"A4",
+    promptEN:"Exercise A — (voi) ___ aici în clasă.",
+    promptRO:"Exercițiul A — (voi) ___ aici în clasă.",
+    choices:["sunteți","suntem","sunt"],
+    answerIndex:0,
+    explainEN:"voi → <b>sunteți</b>."
+  },
+  { type:"mcq", id:"A5",
+    promptEN:"Exercise A — (dv. / dumneavoastră) ___ aici în clasă.",
+    promptRO:"Exercițiul A — (dv. / dumneavoastră) ___ aici în clasă.",
+    choices:["sunteți","ești","este"],
+    answerIndex:0,
+    explainEN:"dumneavoastră → <b>sunteți</b>."
+  },
+
+  // --- Exercise B: (Eu) nu sunt acasă dimineața. Change subject.
+  { type:"mcq", id:"B1",
+    promptEN:"Exercise B — pick the correct: (ea) nu ___ acasă dimineața.",
+    promptRO:"Exercițiul B — alege forma corectă: (ea) nu ___ acasă dimineața.",
+    choices:["sunt","este / e","suntem"],
+    answerIndex:1,
+    explainEN:"ea → <b>nu este</b> / <b>nu e</b>."
+  },
+  { type:"mcq", id:"B2",
+    promptEN:"Exercise B — (noi) nu ___ acasă dimineața.",
+    promptRO:"Exercițiul B — (noi) nu ___ acasă dimineața.",
+    choices:["suntem","sunteți","ești"],
+    answerIndex:0,
+    explainEN:"noi → <b>nu suntem</b>."
+  },
+  { type:"mcq", id:"B3",
+    promptEN:"Exercise B — (ei) nu ___ acasă dimineața.",
+    promptRO:"Exercițiul B — (ei) nu ___ acasă dimineața.",
+    choices:["sunt","este","suntem"],
+    answerIndex:0,
+    explainEN:"ei/ele → <b>nu sunt</b>."
+  },
+
+  // --- Exercise C: occupations (Lucia e doctorandă)
+  { type:"mcq", id:"C1",
+    promptEN:"Exercise C — choose the best sentence: (Radu / student)",
+    promptRO:"Exercițiul C — alege propoziția corectă: (Radu / student)",
+    choices:["Radu e student.","Radu e un student.","Radu este studenți."],
+    answerIndex:0,
+    explainEN:"Occupations: normally no article → <b>Radu e student.</b>"
+  },
+  { type:"mcq", id:"C2",
+    promptEN:"Exercise C — (Monica / tehniciană)",
+    promptRO:"Exercițiul C — (Monica / tehniciană)",
+    choices:["Monica e tehniciană.","Monica e tehnician.","Monica sunt tehniciană."],
+    answerIndex:0,
+    explainEN:"Monica (she) → <b>e</b>, and feminine occupation: <b>tehniciană</b>."
+  },
+  { type:"mcq", id:"C3",
+    promptEN:"Exercise C — (doamna Toma / bibliotecară)",
+    promptRO:"Exercițiul C — (doamna Toma / bibliotecară)",
+    choices:["Doamna Toma e bibliotecară.","Doamna Toma sunteți bibliotecară.","Doamna Toma e bibliotecar."],
+    answerIndex:0,
+    explainEN:"Female librarian: <b>bibliotecară</b>."
+  },
+
+  // --- Exercise D: “Noroc, Radu!” build Q + full answer (like the book)
+  { type:"build", id:"D1",
+    promptEN:"Exercise D — build the question: “Are you at the faculty in the morning?” (tu)",
+    promptRO:"Exercițiul D — construiește întrebarea: „Ești la facultate dimineața?”",
+    bank:["Ești","la","facultate","dimineața","?","Sunteți","în"],
+    answerText:"Ești la facultate dimineața?",
+    explainEN:"Yes/no questions often just add <b>?</b> (intonation in speech)."
+  },
+  { type:"build", id:"D2",
+    promptEN:"Exercise D — build a full answer using the cue (la curs): No, I’m not at the faculty, I’m at the course.",
+    promptRO:"Exercițiul D — răspuns complet (la curs): „Nu, nu sunt la facultate…, sunt la curs.”",
+    bank:["Nu,","nu","sunt","la","facultate","dimineața,","sunt","la","curs","."],
+    answerText:"Nu, nu sunt la facultate dimineața, sunt la curs.",
+    explainEN:"Pattern from the book: <b>Nu, nu sunt…; sunt…</b>"
+  },
+
+  // --- Interrogative form (question words)
+  { type:"mcq", id:"Q1",
+    promptEN:"Pick the best: “Where is Radu?”",
+    promptRO:"Alege: „Unde e Radu?”",
+    choices:["Unde e Radu?","Cine e Radu?","De unde e Radu?"],
+    answerIndex:0,
+    explainEN:"<b>unde</b> = where."
+  },
+  { type:"mcq", id:"Q2",
+    promptEN:"Pick the best: “Where is he from?”",
+    promptRO:"Alege: „De unde e?”",
+    choices:["Unde e?","De unde e?","Când e?"],
+    answerIndex:1,
+    explainEN:"<b>de unde</b> = from where."
+  },
+
+  // --- “Unde e?” place/city pattern (from Stăm de vorbă)
+  { type:"mcq", id:"U1",
+    promptEN:"Choose the correct answer: Unde-i Linda? (Spania / Madrid)",
+    promptRO:"Alege răspunsul corect: Unde-i Linda? (Spania / Madrid)",
+    choices:[
+      "Linda e în Spania, la Madrid.",
+      "Linda e din Spania, în Madrid.",
+      "Linda sunt în Spania, la Madrid."
+    ],
+    answerIndex:0,
+    explainEN:"Country uses <b>în</b>, city often <b>la</b>: <b>în Spania, la Madrid</b>."
+  },
+  { type:"mcq", id:"U2",
+    promptEN:"Choose the correct answer: Unde-i Cornelia? (Anglia / Londra)",
+    promptRO:"Alege răspunsul corect: Unde-i Cornelia? (Anglia / Londra)",
+    choices:[
+      "Cornelia e în Anglia, la Londra.",
+      "Cornelia e la Anglia, în Londra.",
+      "Cornelia e în Anglia, în Londra."
+    ],
+    answerIndex:0,
+    explainEN:"Natural chunk: <b>în Anglia, la Londra</b>."
+  },
+
+  // --- “De unde e?” origin pattern (from De unde e?)
+  { type:"mcq", id:"F1",
+    promptEN:"Pick the best: De unde-i Victor? (Canada)",
+    promptRO:"Alege: De unde-i Victor? (Canada)",
+    choices:[
+      "Victor e din Canada.",
+      "Victor e în Canada.",
+      "Victor e la Canada."
+    ],
+    answerIndex:0,
+    explainEN:"Origin uses <b>din</b>: <b>din Canada</b>."
+  },
+  { type:"mcq", id:"F2",
+    promptEN:"Pick the best: De unde-i Adrian? (România)",
+    promptRO:"Alege: De unde-i Adrian? (România)",
+    choices:[
+      "Adrian e din România.",
+      "Adrian e România.",
+      "Adrian e în România (origin)."
+    ],
+    answerIndex:0,
+    explainEN:"For “from”: <b>din</b>. (<b>în România</b> = located in Romania right now, not origin.)"
+  },
+
+  // --- Nationalities (Exercise A “Naționalități”)
+  { type:"mcq", id:"N1",
+    promptEN:"Choose a correct exchange (polite): “Are you Romanian?” → “Yes, I am Romanian.”",
+    promptRO:"Alege dialogul corect (politicos): „Sunteți român(ă)?” → „Da, sunt român(ă).”",
+    choices:[
+      "Sunteți român(ă)? — Da, sunt român(ă).",
+      "Ești român(ă)? — Da, sunteți român(ă).",
+      "Sunteți român(ă)? — Da, e român(ă)."
+    ],
+    answerIndex:0,
+    explainEN:"Polite question uses <b>sunteți</b>; answer for “I am” is <b>sunt</b>."
+  },
+  { type:"mcq", id:"N2",
+    promptEN:"Pick the correct negative answer: “Sunteți american?” → “No, I am Canadian.”",
+    promptRO:"Alege răspunsul corect: „Sunteți american?” → „Nu, sunt canadian.”",
+    choices:[
+      "Nu, sunt canadian.",
+      "Nu, sunteți canadian.",
+      "Nu, e canadian."
+    ],
+    answerIndex:0,
+    explainEN:"Answer about yourself: <b>sunt</b>."
+  },
+
+  // --- “Reporter la lucru” quick interview (typing, short controlled)
+  { type:"type", id:"T1",
+    promptEN:"Type (polite): “What is your name?”",
+    promptRO:"Scrie (politicos): „What is your name?”",
+    answerText:"Cum vă numiți?",
+    explainEN:"This is the chapter’s formal/polite version used with an instructor."
+  },
+  { type:"type", id:"T2",
+    promptEN:"Type: “Where are you from?” (polite/plural)",
+    promptRO:"Scrie: „Where are you from?” (politicos / plural)",
+    answerText:"De unde sunteți?",
+    explainEN:"Polite/plural: <b>sunteți</b>."
+  },
+  { type:"type", id:"T3",
+    promptEN:"Type: “I am at the university.”",
+    promptRO:"Scrie: „Sunt la universitate.”",
+    answerText:"Sunt la universitate.",
+    explainEN:"Common institutional location: <b>la universitate</b>."
+  },
+];
+
+function defaultState(){
+  return { idx:0, correct:0, attempts:0, legendHidden:false };
+}
+const state = loadState();
+function loadState(){
+  try{
+    const raw = localStorage.getItem("ro_postchapter1_v1_state");
+    if(!raw) return defaultState();
+    return { ...defaultState(), ...JSON.parse(raw) };
+  }catch{ return defaultState(); }
+}
+function save(){ localStorage.setItem("ro_postchapter1_v1_state", JSON.stringify(state)); localStorage.setItem(LS_KEY,"1"); }
+
+const legendBtn = document.getElementById("toggleLegendBtn");
+const legendBox = document.getElementById("legendBox");
+legendBtn.onclick = ()=>{
+  state.legendHidden = !state.legendHidden;
+  save();
+  renderLegend();
+};
+document.getElementById("resetBtn").onclick = ()=>{
+  localStorage.removeItem("ro_postchapter1_v1_state");
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+};
+
+function renderLegend(){
+  legendBox.style.display = state.legendHidden ? "none" : "block";
+  legendBtn.textContent = state.legendHidden ? "Show legend" : "Hide legend";
+}
+function renderHeader(total){
+  document.getElementById("counter").textContent = `${Math.min(state.idx,total)}/${total}`;
+  document.getElementById("progress").textContent =
+    `Progress: ${Math.min(state.idx,total)}/${total} • Correct: ${state.correct} • Attempts: ${state.attempts}`;
+}
+
+function renderFeedback(node, ok, html){
+  node.style.display = "block";
+  node.className = "feedback " + (ok ? "ok":"bad");
+  node.innerHTML = (ok ? "<b>✅ Correct.</b> " : "<b>❌ Not quite.</b> ") + html;
+}
+
+function addActions(container, onContinue, onSkip){
+  const actions = document.createElement("div");
+  actions.className = "actions";
+  const cont = document.createElement("button");
+  cont.textContent = "Continue";
+  cont.onclick = onContinue;
+  const skip = document.createElement("button");
+  skip.className = "secondary";
+  skip.textContent = "Skip";
+  skip.onclick = onSkip;
+  actions.appendChild(cont);
+  actions.appendChild(skip);
+  container.appendChild(actions);
+}
+
+function renderDone(total){
+  const wrap = document.getElementById("practice");
+  wrap.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>Finished ✅</h3>
+    <div class="muted">Correct: <b>${state.correct}</b> • Attempts: <b>${state.attempts}</b></div>
+    <div class="hr"></div>
+    <div class="muted">If you want, send Chapter 2 photos and I’ll generate Pre-Chapter 2 + Post-Chapter 2 the same way.</div>
+    <div class="hr"></div>
+    <div class="actions">
+      <button id="redoAll">Redo all</button>
+    </div>
+  `;
+  wrap.appendChild(box);
+  box.querySelector("#redoAll").onclick = ()=>{
+    state.idx = 0; state.correct = 0; state.attempts = 0;
+    save();
+    renderAll();
+  };
+}
+
+function renderMCQ(item, wrap, total){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="actions">
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const choicesWrap = box.querySelector("#choices");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+  let selected = null;
+
+  item.choices.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = c;
+    div.onclick = ()=>{
+      selected = i;
+      [...choicesWrap.children].forEach(x=>x.classList.remove("selected"));
+      div.classList.add("selected");
+      confirmBtn.disabled = false;
+    };
+    choicesWrap.appendChild(div);
+  });
+
+  addActions(box,
+    ()=>{ state.idx++; save(); renderAll(); },
+    ()=>{ state.idx++; save(); renderAll(); }
+  );
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    const ok = selected === item.answerIndex;
+    if(ok) state.correct++;
+    save();
+
+    const els = box.querySelectorAll(".choice");
+    els.forEach((node,i)=>{
+      node.style.pointerEvents = "none";
+      node.classList.remove("selected");
+      if(i === item.answerIndex) node.classList.add("correct");
+      if(i === selected && i !== item.answerIndex) node.classList.add("wrong");
+    });
+    renderFeedback(fb, ok, item.explainEN || "");
+    confirmBtn.disabled = true;
+  };
+}
+
+function renderType(item, wrap, total){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div style="margin-top:10px;">
+      <input id="inp" type="text" placeholder="Type your answer exactly…" />
+    </div>
+    <div class="actions">
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const inp = box.querySelector("#inp");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+
+  inp.oninput = ()=>{ confirmBtn.disabled = normalize(inp.value).length === 0; };
+  inp.onkeydown = (e)=>{ if(e.key==="Enter" && !confirmBtn.disabled) confirmBtn.click(); };
+  setTimeout(()=>inp.focus(), 40);
+
+  addActions(box,
+    ()=>{ state.idx++; save(); renderAll(); },
+    ()=>{ state.idx++; save(); renderAll(); }
+  );
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    const user = inp.value;
+    const ok = eqLoose(user, item.answerText);
+    if(ok) state.correct++;
+    save();
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Answer: <b>${esc(item.answerText)}</b>. You typed: <b>${esc(user)}</b>.`);
+    renderFeedback(fb, ok, extra);
+
+    confirmBtn.disabled = true;
+    inp.disabled = true;
+  };
+}
+
+function renderBuild(item, wrap, total){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="bank" id="bank"></div>
+    <div class="output" id="out">(click blocks to build)</div>
+    <div class="actions">
+      <button class="secondary" id="clear">Clear</button>
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const bank = box.querySelector("#bank");
+  const out = box.querySelector("#out");
+  const clearBtn = box.querySelector("#clear");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+
+  let built = "";
+  function refresh(){
+    out.textContent = built || "(empty)";
+    confirmBtn.disabled = normalize(built).length === 0;
+  }
+
+  item.bank.forEach(tok=>{
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = tok;
+    chip.onclick = ()=>{
+      if(built.length === 0) built = tok;
+      else if(tok === "." || tok === "?" || tok === "!" || tok.endsWith(","))
+        built = built.trimEnd() + tok;
+      else
+        built = built + " " + tok;
+      refresh();
+    };
+    bank.appendChild(chip);
+  });
+
+  clearBtn.onclick = ()=>{ built=""; fb.style.display="none"; refresh(); };
+
+  addActions(box,
+    ()=>{ state.idx++; save(); renderAll(); },
+    ()=>{ state.idx++; save(); renderAll(); }
+  );
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    const ok = normalize(built) === normalize(item.answerText);
+    if(ok) state.correct++;
+    save();
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Target: <b>${esc(item.answerText)}</b>. You built: <b>${esc(built)}</b>.`);
+    renderFeedback(fb, ok, extra);
+
+    confirmBtn.disabled = true;
+    [...bank.children].forEach(c=>c.style.pointerEvents="none");
+  };
+
+  refresh();
+}
+
+function renderAll(){
+  renderLegend();
+  const total = ITEMS.length;
+  renderHeader(total);
+
+  const wrap = document.getElementById("practice");
+  wrap.innerHTML = "";
+
+  if(state.idx >= total){
+    renderDone(total);
+    return;
+  }
+
+  const item = ITEMS[state.idx];
+  if(item.type==="mcq") renderMCQ(item, wrap, total);
+  if(item.type==="type") renderType(item, wrap, total);
+  if(item.type==="build") renderBuild(item, wrap, total);
+}
+renderAll();
+</script>
+</body>
+</html>
