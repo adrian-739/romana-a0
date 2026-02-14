@@ -17,6 +17,7 @@
     button, a.btn{
       border:1px solid #e6e8ee; border-radius:12px; padding:10px 12px; font-weight:800;
       background:#111; color:#fff; cursor:pointer; text-decoration:none; display:inline-block;
+      
     }
     button.secondary, a.btn.secondary{ background:#fff; color:#111; }
     button:disabled{ opacity:.45; cursor:not-allowed; }
@@ -47,6 +48,11 @@
     .legend ul{ margin:8px 0 0 18px; }
     .legend li{ margin:4px 0; }
     .progress{ color:#333; font-size:13px; }
+    /* Fix: text vizibil în opțiuni */
+.option-btn,
+.option-btn * {
+  color: #111 !important;
+}
   </style>
 </head>
 <body>
