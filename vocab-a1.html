@@ -642,8 +642,8 @@ genderBtns.querySelectorAll("button").forEach(btn=>{
     `;
     renderBadgeAndCounted();
     renderStats(); 
-    // stay on this card; user presses Next manually
-// (Next button already calls pickNext())
+ // move on after a short delay so user sees the answer (adjust if you want)
+setTimeout(()=>{ pickNext(); }, 6650);
   });
 });
 
