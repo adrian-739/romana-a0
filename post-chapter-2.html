@@ -1,5 +1,367 @@
-/* Corrected CSS rule for text visibility */
-.options {
-    color: #000000; /* Dark color for Romanian text */
-    background-color: #FFFFFF; /* White background */
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Post-Chapter 2 — Practice</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body{ margin:0; background:#f6f7f9; color:#111; }
+    header{ background:#fff; border-bottom:1px solid #e6e8ee; padding:16px; }
+    header h1{ margin:0 0 6px 0; font-size:18px; }
+    header p{ margin:0; color:#444; font-size:13px; line-height:1.35; }
+    main{ max-width:980px; margin:0 auto; padding:14px; }
+    .row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .pill{ display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; background:#fff; }
+    .card{ background:#fff; border:1px solid #e6e8ee; border-radius:14px; padding:14px; margin-bottom:12px; }
+    button, a.btn{
+      border:1px solid #e6e8ee; border-radius:12px; padding:10px 12px; font-weight:800;
+      background:#111; color:#fff; cursor:pointer; text-decoration:none; display:inline-block;
+    }
+    button.secondary, a.btn.secondary{ background:#fff; color:#111; }
+    button:disabled{ opacity:.45; cursor:not-allowed; }
+    .q-title{ font-weight:900; margin:0 0 6px 0; }
+    .q-meta{ color:#555; font-size:13px; line-height:1.35; margin:0 0 12px 0; }
+    .options{      
+        display:grid; grid-template-columns:1fr; gap:10px;
+        color: #000000; /* Dark color for Romanian text */
+        background-color: #FFFFFF; /* White background */
 }
+    .opt{
+      border:1px solid #e6e8ee; background:#fff; border-radius:12px; padding:12px;
+      cursor:pointer; text-align:left; font-weight:800;
+    }
+    .opt small{ display:block; margin-top:4px; color:#555; font-weight:600; }
+    .opt.selected{ outline:3px solid rgba(17,17,17,.12); border-color:#cfd5e2; }
+    .feedback{
+      margin-top:12px; padding:12px; border-radius:12px; border:1px solid #e6e8ee;
+      background:#fbfbfc; color:#111; font-size:14px; line-height:1.35;
+    }
+    .ok{ border-color:#bfe5c9; background:#f3fbf5; }
+    .bad{ border-color:#f1c1c1; background:#fff5f5; }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .split{ display:grid; grid-template-columns:1.15fr .85fr; gap:12px; }
+    @media (max-width:900px){ .split{ grid-template-columns:1fr; } }
+    .legend{
+      border:1px dashed #e6e8ee; background:#fff; border-radius:14px; padding:12px;
+      color:#333; font-size:13px; line-height:1.35;
+    }
+    .legend h3{ margin:0 0 8px 0; font-size:14px; }
+    .legend .ro{ font-weight:900; }
+    .legend ul{ margin:8px 0 0 18px; }
+    .legend li{ margin:4px 0; }
+    .progress{ color:#333; font-size:13px; }
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="row">
+    <span class="pill">A0 → A1</span>
+    <span class="pill">Chapter 2</span>
+    <span class="pill">Confirm-to-answer</span>
+  </div>
+  <h1>Post-Chapter 2 — Practice</h1>
+  <p>Pick an answer → click <b>Confirm</b> → get feedback. You can open the legend any time.</p>
+</header>
+
+<main>
+
+  <div class="card row">
+    <a class="btn secondary" href="./pre-chapter-2.html">Legend (Pre-Chapter 2)</a>
+    <button class="secondary" id="toggleLegend">Hide legend</button>
+    <button class="secondary" id="resetBtn">Reset</button>
+    <span class="progress" id="progressTxt"></span>
+  </div>
+
+  <div class="split">
+    <div class="card" id="quizCard">
+      <div class="q-title" id="qTitle">Loading…</div>
+      <div class="q-meta" id="qMeta"></div>
+
+      <div class="options" id="options"></div>
+
+      <div class="row" style="margin-top:12px;">
+        <button id="confirmBtn" disabled>Confirm</button>
+        <button class="secondary" id="nextBtn" disabled>Next</button>
+      </div>
+
+      <div id="feedback" class="feedback" style="display:none;"></div>
+    </div>
+
+    <div class="legend card" id="legendBox">
+      <h3>Quick legend (mini)</h3>
+      <ul>
+        <li><span class="ro">Ce mai faci?</span> = informal “How are you?”</li>
+        <li><span class="ro">Ce mai faceți?</span> = polite / formal “How are you?”</li>
+        <li><span class="ro">întotdeauna</span> / <span class="ro">uneori</span> / <span class="ro">nu… niciodată</span></li>
+        <li>Occupation/nationality: usually no article → <span class="ro">Sorin e inginer.</span></li>
+        <li>But with adjective: use <span class="ro">un/o</span> → <span class="ro">Sorin e un inginer bun.</span></li>
+        <li>Demonstratives: <span class="ro">acesta/aceasta</span> (this), <span class="ro">acela/aceea</span> (that)</li>
+        <li>Time: <span class="ro">acum</span>, <span class="ro">astăzi</span>, <span class="ro">astă-seară</span>, <span class="ro">mîine</span>, <span class="ro">după masă</span></li>
+        <li>Sequence: <span class="ro">mai întîi</span>… <span class="ro">apoi</span>… <span class="ro">după</span>…</li>
+        <li><span class="ro">a merge</span>: <span class="ro">în</span> Europe/România; <span class="ro">la</span> București / la o cafenea</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Question bank (derived from your Chapter 2 pages)
+  const QUESTIONS = [
+    {
+      title: "Greeting (informal)",
+      meta: "Choose the best Romanian for: “How are you?” (to a friend)",
+      options: [
+        { ro: "Ce mai faci?", en: "How are you? (informal)", ok: true, why: "To a friend / informal ‘you’." },
+        { ro: "Ce mai faceți?", en: "How are you? (polite/formal)", ok: false, why: "This is polite/formal (plural verb form)." },
+        { ro: "Cum vă numiți?", en: "What is your name?", ok: false, why: "That asks for a name." }
+      ]
+    },
+    {
+      title: "Greeting (polite/formal)",
+      meta: "Choose the best Romanian for: “How are you?” (polite / formal)",
+      options: [
+        { ro: "Ce mai faceți?", en: "How are you? (polite/formal)", ok: true, why: "Used with dumneavoastră / polite form." },
+        { ro: "Ce mai faci?", en: "How are you? (informal)", ok: false, why: "This is informal (tu)." },
+        { ro: "Ce este acesta?", en: "What is this one?", ok: false, why: "That’s a demonstrative question." }
+      ]
+    },
+    {
+      title: "Quick answer",
+      meta: "Pick the most natural answer to: “Ce mai faci?”",
+      options: [
+        { ro: "Bine, mulțumesc.", en: "Fine, thanks.", ok: true, why: "Standard short reply." },
+        { ro: "Sînt inginer.", en: "I’m an engineer.", ok: false, why: "That’s identity/occupation, not a greeting response." },
+        { ro: "În România.", en: "In Romania.", ok: false, why: "That’s a location phrase, incomplete here." }
+      ]
+    },
+    {
+      title: "Never",
+      meta: "Choose the correct Romanian for: “I am never tired.”",
+      options: [
+        { ro: "Nu sînt niciodată obosit.", en: "I am never tired.", ok: true, why: "‘Never’ needs nu + niciodată." },
+        { ro: "Sînt niciodată obosit.", en: "I am never tired.", ok: false, why: "Missing ‘nu’." },
+        { ro: "Nu sînt întotdeauna obosit.", en: "I am not always tired.", ok: false, why: "Meaning changes to ‘not always’." }
+      ]
+    },
+    {
+      title: "Sometimes",
+      meta: "Choose the best Romanian for: “Sometimes I go to the library.”",
+      options: [
+        { ro: "Uneori merg la bibliotecă.", en: "Sometimes I go to the library.", ok: true, why: "uneori = sometimes; merg = I go." },
+        { ro: "Întotdeauna merg la bibliotecă.", en: "Always I go to the library.", ok: false, why: "That’s ‘always’." },
+        { ro: "Nu merg la bibliotecă.", en: "I do not go to the library.", ok: false, why: "That’s just negative, no ‘sometimes’." }
+      ]
+    },
+    {
+      title: "Occupation (no adjective)",
+      meta: "Pick the correct Romanian: “Sorin is an engineer.” (no adjective)",
+      options: [
+        { ro: "Sorin este inginer.", en: "Sorin is an engineer.", ok: true, why: "Occupation after a fi usually has NO ‘un/o’." },
+        { ro: "Sorin este un inginer.", en: "Sorin is an engineer.", ok: false, why: "Book rule: ‘un/o’ is usually omitted for occupation/nationality unless modified." },
+        { ro: "Sorin este o inginer.", en: "Sorin is an engineer.", ok: false, why: "Gender/article mismatch." }
+      ]
+    },
+    {
+      title: "Occupation + adjective",
+      meta: "Pick the correct Romanian: “Sorin is a good engineer.”",
+      options: [
+        { ro: "Sorin este un inginer bun.", en: "Sorin is a good engineer.", ok: true, why: "With an adjective (bun), include un." },
+        { ro: "Sorin este inginer bun.", en: "Sorin is a good engineer.", ok: false, why: "Book rule says include un/o when modified by an adjective." },
+        { ro: "Sorin este o inginer bună.", en: "Sorin is a good engineer.", ok: false, why: "Gender/adjective mismatch." }
+      ]
+    },
+    {
+      title: "Demonstratives (feminine)",
+      meta: "Choose the correct Romanian: “This (one) is a friend (female).” (prietenă)",
+      options: [
+        { ro: "Aceasta este o prietenă.", en: "This is a (female) friend.", ok: true, why: "Feminine demonstrative: aceasta." },
+        { ro: "Acesta este o prietenă.", en: "This is a (female) friend.", ok: false, why: "Acesta is masculine/neuter." },
+        { ro: "Aceea este un prieten.", en: "That is a (male) friend.", ok: false, why: "Changes both gender and meaning." }
+      ]
+    },
+    {
+      title: "Time: this evening",
+      meta: "Pick the best Romanian: “This evening I go to the opera.”",
+      options: [
+        { ro: "Astă-seară merg la operă.", en: "This evening I go to the opera.", ok: true, why: "astă-seară = this evening; la operă = to the opera." },
+        { ro: "Astăzi merg în operă.", en: "Today I go in the opera.", ok: false, why: "Wrong preposition and weird destination usage." },
+        { ro: "Mîine merg la operă.", en: "Tomorrow I go to the opera.", ok: false, why: "Meaning changes to tomorrow." }
+      ]
+    },
+    {
+      title: "Sequence: first… then…",
+      meta: "Pick the best Romanian: “First I go to class, then I go to the library.”",
+      options: [
+        { ro: "Mai întîi merg la curs și apoi merg la bibliotecă.", en: "First… then…", ok: true, why: "Matches the sequence words from the lesson." },
+        { ro: "După masă merg la curs și acum merg la bibliotecă.", en: "After lunch… now…", ok: false, why: "Different meaning (time, not sequence first/then)." },
+        { ro: "Uneori merg la curs, niciodată merg la bibliotecă.", en: "Sometimes… never…", ok: false, why: "Incorrect structure and meaning." }
+      ]
+    },
+    {
+      title: "A merge: în vs la",
+      meta: "Pick the correct pair (country vs city):",
+      options: [
+        { ro: "Merg în România. / Merg la București.", en: "to Romania / to Bucharest", ok: true, why: "în for country; la for city." },
+        { ro: "Merg la România. / Merg în București.", en: "to Romania / in Bucharest", ok: false, why: "Prepositions swapped." },
+        { ro: "Merg pe România. / Merg sub București.", en: "…", ok: false, why: "Not used for destinations." }
+      ]
+    },
+    {
+      title: "Restaurant (a cere)",
+      meta: "Choose the best Romanian: “I’m asking for a tea.”",
+      options: [
+        { ro: "Eu cer un ceai.", en: "I’m asking for a tea.", ok: true, why: "Direct from the exercise." },
+        { ro: "Eu merg un ceai.", en: "I go a tea.", ok: false, why: "Wrong verb." },
+        { ro: "Eu fac un ceai? (as ‘ask’)", en: "I do a tea? (ask)", ok: false, why: "a face = do/make; not ‘ask for’." }
+      ]
+    },
+    {
+      title: "Plans (today)",
+      meta: "Pick the best Romanian question: “What are you doing today?”",
+      options: [
+        { ro: "Ce faci astăzi?", en: "What are you doing today?", ok: true, why: "Standard: Ce faci + time word." },
+        { ro: "Cine faci astăzi?", en: "Who do you today?", ok: false, why: "Wrong question word." },
+        { ro: "Ce este astăzi?", en: "What is today?", ok: false, why: "Different meaning." }
+      ]
+    },
+    {
+      title: "A crede (form)",
+      meta: "Choose the correct form: “You (singular) believe/think”",
+      options: [
+        { ro: "crezi", en: "you believe", ok: true, why: "a crede: cred, crezi, crede…" },
+        { ro: "credem", en: "we believe", ok: false, why: "That’s ‘we’." },
+        { ro: "credeți", en: "you (plural/polite) believe", ok: false, why: "That’s plural/polite ‘you’." }
+      ]
+    },
+    {
+      title: "Pronunciation (optional concept check)",
+      meta: "From the book: when c is followed by e/i, it sounds like…",
+      options: [
+        { ro: "English “ch” (like cheese/check)", en: "ch sound", ok: true, why: "Book explanation for ce/ci." },
+        { ro: "English “k” (like key)", en: "k sound", ok: false, why: "That’s c before a/o/u (roughly), not ce/ci." },
+        { ro: "English “s” (like sun)", en: "s sound", ok: false, why: "Not the rule shown on your page." }
+      ]
+    }
+  ];
+
+  let idx = 0;
+  let score = 0;
+  let selected = null;
+  let locked = false;
+
+  const qTitle = document.getElementById("qTitle");
+  const qMeta = document.getElementById("qMeta");
+  const optionsBox = document.getElementById("options");
+  const confirmBtn = document.getElementById("confirmBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const feedback = document.getElementById("feedback");
+  const progressTxt = document.getElementById("progressTxt");
+  const resetBtn = document.getElementById("resetBtn");
+  const toggleLegend = document.getElementById("toggleLegend");
+  const legendBox = document.getElementById("legendBox");
+
+  function render() {
+    const q = QUESTIONS[idx];
+    selected = null;
+    locked = false;
+
+    qTitle.textContent = q.title;
+    qMeta.textContent = q.meta;
+
+    optionsBox.innerHTML = "";
+    q.options.forEach((opt, i) => {
+      const b = document.createElement("button");
+      b.className = "opt";
+      b.type = "button";
+      b.innerHTML = `<div>${opt.ro}</div><small>${opt.en}</small>`;
+      b.addEventListener("click", () => {
+        if (locked) return;
+        [...optionsBox.querySelectorAll(".opt")].forEach(x => x.classList.remove("selected"));
+        b.classList.add("selected");
+        selected = i;
+        confirmBtn.disabled = false;
+      });
+      optionsBox.appendChild(b);
+    });
+
+    confirmBtn.disabled = true;
+    nextBtn.disabled = true;
+    feedback.style.display = "none";
+    feedback.classList.remove("ok", "bad");
+
+    progressTxt.textContent = `Question ${idx + 1} / ${QUESTIONS.length}  •  Score ${score}`;
+  }
+
+  function confirm() {
+    if (selected === null || locked) return;
+    locked = true;
+
+    const q = QUESTIONS[idx];
+    const opt = q.options[selected];
+    const ok = !!opt.ok;
+
+    if (ok) score += 1;
+
+    feedback.style.display = "block";
+    feedback.classList.add(ok ? "ok" : "bad");
+
+    const correctIdx = q.options.findIndex(o => o.ok);
+    const correct = q.options[correctIdx];
+
+    feedback.innerHTML = `
+      <div><b>${ok ? "✅ Correct" : "❌ Not quite"}</b></div>
+      <div style="margin-top:6px;"><span class="mono">${opt.ro}</span></div>
+      <div style="margin-top:6px; color:#333;">Why: ${opt.why}</div>
+      ${ok ? "" : `<div style="margin-top:10px;"><b>Correct:</b> <span class="mono">${correct.ro}</span><br><span style="color:#555;">${correct.why}</span></div>`}
+    `;
+
+    confirmBtn.disabled = true;
+    nextBtn.disabled = false;
+    progressTxt.textContent = `Question ${idx + 1} / ${QUESTIONS.length}  •  Score ${score}`;
+  }
+
+  function next() {
+    if (!locked) return;
+    idx += 1;
+    if (idx >= QUESTIONS.length) {
+      // End screen
+      qTitle.textContent = "Finished ✅";
+      qMeta.textContent = "You completed Post-Chapter 2 practice.";
+      optionsBox.innerHTML = `
+        <div class="feedback ok">
+          <b>Score:</b> ${score} / ${QUESTIONS.length}<br>
+          If you want, reset and try again until you can do it fast and clean.
+        </div>
+      `;
+      confirmBtn.disabled = true;
+      nextBtn.disabled = true;
+      feedback.style.display = "none";
+      progressTxt.textContent = `Done  •  Score ${score}`;
+      return;
+    }
+    render();
+  }
+
+  function resetAll() {
+    idx = 0;
+    score = 0;
+    render();
+  }
+
+  toggleLegend.addEventListener("click", () => {
+    const hidden = legendBox.style.display === "none";
+    legendBox.style.display = hidden ? "block" : "none";
+    toggleLegend.textContent = hidden ? "Hide legend" : "Show legend";
+  });
+
+  confirmBtn.addEventListener("click", confirm);
+  nextBtn.addEventListener("click", next);
+  resetBtn.addEventListener("click", resetAll);
+
+  render();
+</script>
+</body>
+</html>
