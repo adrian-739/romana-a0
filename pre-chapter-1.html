@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pre-Chapter 1 (Discover Romanian) — Identity & University</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin:0; background:#f6f7f9; color:#111; }
+    header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
+    header h1 { margin:0 0 6px 0; font-size:18px; }
+    header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
+
+    main { max-width:1100px; margin:0 auto; padding:14px; display:grid; grid-template-columns:420px 1fr; gap:14px; }
+    .card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+    .pane { padding:12px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
+    .muted { color:#555; font-size:13px; line-height:1.4; }
+    .big { font-size:16px; line-height:1.4; }
+    .hr { height:1px; background:#e6e8ee; margin:12px 0; }
+
+    button{
+      border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
+      padding:10px 12px; cursor:pointer;
+    }
+    button.secondary{ background:#fff; color:#111; }
+    button:disabled{ opacity:.5; cursor:not-allowed; }
+
+    .legend{
+      border:1px solid #e6e8ee; border-radius:12px; padding:12px; background:#fbfcff;
+    }
+    .legend h3 { margin:0 0 8px 0; font-size:15px; }
+    .legend ul { margin:8px 0 0 18px; padding:0; }
+    .legend li { margin:7px 0; }
+    .legend code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fff; border:1px solid #e6e8ee; border-radius:7px; padding:1px 6px; }
+
+    .q{ padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
+    .q h3 { margin:0 0 8px 0; font-size:15px; }
+    .choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+    .choice { border:1px solid #e6e8ee; border-radius:10px; padding:10px; cursor:pointer; background:#fff; }
+    .choice:hover { background:#fafbff; }
+    .choice.selected { border-color:#111; }
+    .choice.correct { border-color:#0a7b34; background:#f0fff6; }
+    .choice.wrong { border-color:#b00020; background:#fff1f3; }
+
+    input[type="text"]{
+      border:1px solid #e6e8ee; border-radius:10px; padding:10px; width:min(720px,100%); font-size:14px;
+    }
+
+    .builder{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chip{ border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; user-select:none; }
+    .chip:hover { background:#fafbff; }
+    .output{
+      margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff;
+      font-size:16px; min-height:44px;
+    }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .feedback{ margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
+    .ok { border-color:#0a7b34; background:#f0fff6; }
+    .bad { border-color:#b00020; background:#fff1f3; }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2px 6px; border: 1px solid #e6e8ee; border-radius: 7px; background:#fff; }
+
+    .miniTable{
+      width:100%; border-collapse:collapse; margin-top:8px; font-size:13px;
+    }
+    .miniTable td, .miniTable th{ border:1px solid #e6e8ee; padding:6px 8px; text-align:left; }
+    .miniTable th{ background:#fbfcff; }
+
+    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Pre-Chapter 1 — Identity & University (based on Discover Romanian, Ch.1)</h1>
+  <p>
+    Goal: understand + produce basic “Who are you / where are you from / what are you / where are you?” using
+    <b>polite you</b>, <b>a fi</b> forms, <b>occupations</b>, <b>nationalities</b>, <b>la/în</b>, and <b>questions</b>.
+  </p>
+</header>
+
+<main>
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <span class="tag">Single page • offline</span>
+        <div class="muted" id="progress">Progress: 0/0</div>
+      </div>
+      <div class="row">
+        <button class="secondary" id="toggleLegendBtn">Hide legend</button>
+        <button class="secondary" id="resetBtn" title="Clear saved progress">Reset</button>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="legend" id="legendBox">
+      <h3>Legend / Cheat-sheet (Chapter 1 core ideas)</h3>
+      <ul>
+        <li><b>“You” has 4 common forms:</b>
+          <code>tu</code> (informal),
+          <code>dumneata</code> (familiar-polite, 1 person),
+          <code>dumneavoastră</code> (formal-polite, 1+ people),
+          <code>voi</code> (informal plural).
+        </li>
+        <li><b>a fi (to be) — present:</b>
+          <table class="miniTable">
+            <tr><th>Subject</th><th>Romanian</th><th>English</th></tr>
+            <tr><td>eu</td><td>sunt</td><td>I am</td></tr>
+            <tr><td>tu / dumneata</td><td>ești</td><td>you are (sing.)</td></tr>
+            <tr><td>el / ea</td><td>este / e</td><td>he/she is</td></tr>
+            <tr><td>noi</td><td>suntem</td><td>we are</td></tr>
+            <tr><td>voi / dumneavoastră</td><td>sunteți</td><td>you are (pl. or polite)</td></tr>
+            <tr><td>ei / ele</td><td>sunt</td><td>they are</td></tr>
+          </table>
+        </li>
+        <li><b>Pronouns are often dropped:</b> <code>Sunt din Statele Unite.</code> (= I am from the USA.)</li>
+        <li><b>Occupations usually have NO article:</b> <code>Sunt student.</code> (not “a student”).</li>
+        <li><b>Gender pairs:</b> <code>student / studentă</code>, <code>profesor / profesoară</code>, <code>american / americană</code>, <code>român / româncă</code>.</li>
+        <li><b>Place:</b> <code>Sunt la universitate</code> (at) / <code>Sunt în bibliotecă</code> (in).</li>
+        <li><b>Questions:</b>
+          yes/no by intonation + <code>?</code> (e.g., <code>Sunteți american?</code>) and question words
+          <code>cine?</code> who, <code>ce?</code> what, <code>unde?</code> where, <code>când?</code> when, <code>cum?</code> how,
+          plus <code>de unde?</code> from where.
+        </li>
+        <li><b>Short “este”:</b> <code>este</code> → <code>e</code>. After a vowel it may hyphenate: <code>Cine-i?</code> <code>Unde-i Radu?</code></li>
+        <li><b>Și eu…</b> can mean <b>also/too</b>: <code>Și eu sunt student.</code> (= I am a student too.)</li>
+      </ul>
+      <div class="muted" style="margin-top:10px;">
+        Tip: focus on <b>chunks</b>, not perfection. Keep answers short and usable.
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="muted">
+      How it works: choose an answer → <b>Confirm</b> → read feedback → <b>Continue</b>.
+      Your progress is saved locally in this browser.
+    </div>
+  </section>
+
+  <section class="card pane">
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <div class="big" id="title">Practice</div>
+        <div class="muted" id="subtitle">Pre-Chapter 1 • Identity & University</div>
+      </div>
+      <span class="tag" id="counter">0/0</span>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="practice"></div>
+
+    <div class="hr"></div>
+    <div class="muted">Tip: for typing questions, press <span class="kbd">Enter</span> once Confirm is enabled.</div>
+  </section>
+</main>
+
+<script>
+const LS_KEY = "ro_prechapter1_v1";
+
+const ITEMS = [
+  // --- Dialog comprehension (from “Bună ziua!”) ---
+  { type:"mcq", id:"d1",
+    promptEN:"In the university dialog, what is Doamna Bogdan?",
+    promptRO:"În dialogul de la universitate, ce este Doamna Bogdan?",
+    choices:["Studentă","Profesoară","Reporteră"],
+    answerIndex:1,
+    explainEN:"In the text she says: “Sînt profesoara Anca Bogdan.” → she is the professor."
+  },
+  { type:"tf", id:"d2",
+    promptEN:"True/False: Andrew is from Canada.",
+    promptRO:"Adevărat/Fals: Andrew e din Canada.",
+    answerBool:false,
+    explainEN:"He says: “Sînt din Statele Unite.” → USA, not Canada."
+  },
+  { type:"tf", id:"d3",
+    promptEN:"True/False: Amelia is Romanian.",
+    promptRO:"Adevărat/Fals: Amelia e româncă.",
+    answerBool:false,
+    explainEN:"She answers: “Nu… sînt americancă de origine română.” → American of Romanian origin."
+  },
+  { type:"tf", id:"d4",
+    promptEN:"True/False: They are at a Romanian university (in Romania).",
+    promptRO:"Adevărat/Fals: Sunt la o universitate românească (în România).",
+    answerBool:true,
+    explainEN:"The scene is “At the University… first class at a Romanian university.”"
+  },
+
+  // --- Polite you forms ---
+  { type:"mcq", id:"p1",
+    promptEN:"Pick the most formal/polite ‘you’:",
+    promptRO:"Alege forma cea mai formală/politicoasă pentru „tu”:",
+    choices:["tu","dumneata","dumneavoastră"],
+    answerIndex:2,
+    explainEN:"Chapter note: <b>dumneavoastră</b> is the most formal form used in public exchanges."
+  },
+  { type:"mcq", id:"p2",
+    promptEN:"In “Cum vă numiți?”, what does “vă” signal?",
+    promptRO:"În „Cum vă numiți?”, ce semnalizează „vă”?",
+    choices:["Informal tu","Polite/formal you","They (ei/ele)"],
+    answerIndex:1,
+    explainEN:"“vă” pairs with polite/plural address, like <b>dumneavoastră</b> / <b>voi</b>."
+  },
+  { type:"cloze", id:"p3",
+    promptEN:"Fill: (polite) “What is your name?” → Cum ___ numiți?",
+    promptRO:"Completează: (politicos) „Cum vă numiți?” → Cum ___ numiți?",
+    answerText:"vă",
+    explainEN:"Polite/formal: <b>Cum vă numiți?</b> (to one person politely or to a group)."
+  },
+  { type:"mcq", id:"p4",
+    promptEN:"Choose the informal version of “Cum vă numiți?”",
+    promptRO:"Alege varianta informală pentru „Cum vă numiți?”",
+    choices:["Cum te cheamă?","Cum te numiți?","Cum vă cheamă?"],
+    answerIndex:0,
+    explainEN:"Informal singular uses <b>te</b>: <b>Cum te cheamă?</b> (also: „Cum te numești?”)."
+  },
+
+  // --- a fi (full forms) ---
+  { type:"mcq", id:"b1",
+    promptEN:"Choose: noi ___ (we are)",
+    promptRO:"Alege: noi ___ (noi suntem)",
+    choices:["sunt","suntem","sunteți"],
+    answerIndex:1,
+    explainEN:"noi = we → <b>suntem</b>."
+  },
+  { type:"mcq", id:"b2",
+    promptEN:"Choose: voi / dumneavoastră ___ (you are)",
+    promptRO:"Alege: voi / dumneavoastră ___",
+    choices:["sunteți","sunt","ești"],
+    answerIndex:0,
+    explainEN:"voi / dumneavoastră → <b>sunteți</b>."
+  },
+  { type:"mcq", id:"b3",
+    promptEN:"Choose: ei / ele ___ (they are)",
+    promptRO:"Alege: ei / ele ___",
+    choices:["sunt","este","suntem"],
+    answerIndex:0,
+    explainEN:"ei/ele = they → <b>sunt</b>."
+  },
+  { type:"cloze", id:"b4",
+    promptEN:"Fill: (eu) ___ aici. (I am here.)",
+    promptRO:"Completează: (eu) ___ aici.",
+    answerText:"sunt",
+    explainEN:"I am → <b>sunt</b>."
+  },
+  { type:"cloze", id:"b5",
+    promptEN:"Fill: (tu) ___ acasă? (Are you at home?)",
+    promptRO:"Completează: (tu) ___ acasă?",
+    answerText:"ești",
+    explainEN:"tu = you (informal singular) → <b>ești</b>."
+  },
+
+  // --- Pronoun dropping ---
+  { type:"mcq", id:"drop1",
+    promptEN:"Which is the most natural Romanian for “I am from the USA”?",
+    promptRO:"Care e varianta cea mai naturală pentru „I am from the USA”?",
+    choices:["Eu sunt din Statele Unite.","Sunt din Statele Unite.","Eu sunt eu din Statele Unite."],
+    answerIndex:1,
+    explainEN:"Romanian often drops the pronoun when the verb ending shows the subject: <b>Sunt din…</b>"
+  },
+
+  // --- este vs e + hyphen -i ---
+  { type:"mcq", id:"e1",
+    promptEN:"Pick the short spoken form of “este”:",
+    promptRO:"Alege forma scurtă (vorbită) pentru „este”:",
+    choices:["ea","e","ei"],
+    answerIndex:1,
+    explainEN:"Short form: <b>este → e</b> (same meaning)."
+  },
+  { type:"mcq", id:"e2",
+    promptEN:"After a vowel, the short “e” can hyphenate. Pick the correct spelling:",
+    promptRO:"După vocală, „e” poate apărea cu cratimă. Alege forma corectă:",
+    choices:["Cine i Radu?","Cine-i Radu?","Cinei Radu?"],
+    answerIndex:1,
+    explainEN:"Chapter note: <b>Cine-i…?</b> is common in speech/spelling conventions."
+  },
+  { type:"mcq", id:"e3",
+    promptEN:"Pick a correct pair (same meaning):",
+    promptRO:"Alege perechea corectă (același sens):",
+    choices:["El este la birou. / El e la birou.","El ești la birou. / El este la birou.","El suntem la birou. / El este la birou."],
+    answerIndex:0,
+    explainEN:"este and e are equivalent: <b>El este la birou</b> = <b>El e la birou</b>."
+  },
+
+  // --- Negation with nu ---
+  { type:"mcq", id:"n1",
+    promptEN:"Pick the correct negative: “She isn’t at home.”",
+    promptRO:"Alege negația corectă: „Ea nu-i acasă.”",
+    choices:["Ea e nu acasă.","Ea nu e acasă.","Ea nu sunt acasă."],
+    answerIndex:1,
+    explainEN:"Negation always puts <b>nu</b> before the verb: <b>nu e</b> / <b>nu este</b>."
+  },
+  { type:"tf", id:"n2",
+    promptEN:"True/False: In Romanian, “nu” goes before the verb.",
+    promptRO:"Adevărat/Fals: În română, „nu” stă înaintea verbului.",
+    answerBool:true,
+    explainEN:"Rule in the chapter: Romanian always uses <b>nu</b> before the verb."
+  },
+
+  // --- Occupations: no article + gender pairs ---
+  { type:"mcq", id:"occ1",
+    promptEN:"Choose the best Romanian: “I am a student.”",
+    promptRO:"Alege cea mai bună variantă: „I am a student.”",
+    choices:["Sunt un student.","Sunt student.","Sunt studentul."],
+    answerIndex:1,
+    explainEN:"Occupations typically have <b>no article</b>: <b>Sunt student.</b>"
+  },
+  { type:"mcq", id:"occ2",
+    promptEN:"Pick the feminine form: professor (female) =",
+    promptRO:"Alege forma feminină: profesor (femeie) =",
+    choices:["profesor","profesoară","profesore"],
+    answerIndex:1,
+    explainEN:"Gender pair in the chapter: <b>profesor / profesoară</b>."
+  },
+  { type:"mcq", id:"occ3",
+    promptEN:"Pick the feminine form: student (female) =",
+    promptRO:"Alege forma feminină: student (femeie) =",
+    choices:["studentă","studente","student"],
+    answerIndex:0,
+    explainEN:"Gender pair: <b>student / studentă</b>."
+  },
+  { type:"build", id:"occ4",
+    promptEN:"Build: “She is a doctoral candidate.” (Lucia e doctorandă.)",
+    promptRO:"Construiește: «Lucia e doctorandă.»",
+    bank:["Lucia","e","este","doctorandă",".","doctorand","Nu"],
+    answerText:"Lucia e doctorandă.",
+    explainEN:"Occupations: no article; short <b>e</b> is natural."
+  },
+
+  // --- Nationalities: masc/fem, lower-case adjective ---
+  { type:"mcq", id:"nat1",
+    promptEN:"Pick the feminine: American (female) =",
+    promptRO:"Alege forma feminină: american (femeie) =",
+    choices:["americană","americancă","americane"],
+    answerIndex:0,
+    explainEN:"In the chapter examples: <b>american / americană</b> (manual also uses “americancă” in dialogue; both appear in practice—learn the one used in your text)."
+  },
+  { type:"mcq", id:"nat2",
+    promptEN:"Pick the feminine: Romanian (female) =",
+    promptRO:"Alege forma feminină: român (femeie) =",
+    choices:["română","româncă","română (cu î)"],
+    answerIndex:1,
+    explainEN:"Common pair: <b>român / româncă</b>. (Also: “română” is the language/feminine adjective in other contexts; your chapter uses român(ă)/româncă patterns.)"
+  },
+  { type:"build", id:"nat3",
+    promptEN:"Build: “I am Romanian. And you (polite)?”",
+    promptRO:"Construiește: «Eu sunt român(ă). Și dumneavoastră?»",
+    bank:["Eu","sunt","român(ă).","Și","dumneavoastră?","tu?","ești","."],
+    answerText:"Eu sunt român(ă). Și dumneavoastră?",
+    explainEN:"Chapter pattern for nationality + polite follow-up question."
+  },
+
+  // --- de unde / din ---
+  { type:"mcq", id:"from1",
+    promptEN:"Choose: “Where are you from?” (polite) =",
+    promptRO:"Alege: „De unde sunteți?” (politicos) =",
+    choices:["De unde ești?","De unde sunteți?","Unde sunteți din?"],
+    answerIndex:1,
+    explainEN:"Polite/plural uses <b>sunteți</b>: <b>De unde sunteți?</b>"
+  },
+  { type:"build", id:"from2",
+    promptEN:"Build: “I am from Italy.”",
+    promptRO:"Construiește: «Sunt din Italia.»",
+    bank:["Sunt","din","Italia",".","în","la","Eu"],
+    answerText:"Sunt din Italia.",
+    explainEN:"From = <b>din</b>. Pronoun can be dropped."
+  },
+  { type:"mcq", id:"from3",
+    promptEN:"Pick the best question: “Where is Radu?”",
+    promptRO:"Alege întrebarea: „Unde e Radu?”",
+    choices:["Unde e Radu?","Unde Radu e?","Unde sunt Radu?"],
+    answerIndex:0,
+    explainEN:"Direct question word questions often keep verb early: <b>Unde e Radu?</b>"
+  },
+  { type:"mcq", id:"from4",
+    promptEN:"Pick the contracted common spelling:",
+    promptRO:"Alege forma contractată obișnuită:",
+    choices:["Unde-i Radu?","Undei Radu?","Unde i Radu?"],
+    answerIndex:0,
+    explainEN:"After vowel: <b>Unde-i…?</b> appears (unde + e)."
+  },
+
+  // --- la / în for places (university life list) ---
+  { type:"mcq", id:"loc1",
+    promptEN:"Choose the best: “I am at the university.”",
+    promptRO:"Alege: „Sunt la universitate.”",
+    choices:["Sunt în universitate.","Sunt la universitate.","Sunt pe universitate."],
+    answerIndex:1,
+    explainEN:"Common chunk for “at” institutions: <b>la universitate</b>."
+  },
+  { type:"mcq", id:"loc2",
+    promptEN:"Choose the best: “I am in the library.”",
+    promptRO:"Alege: „Sunt în bibliotecă.”",
+    choices:["Sunt la bibliotecă.","Sunt în bibliotecă.","Sunt din bibliotecă."],
+    answerIndex:1,
+    explainEN:"Inside a place: <b>în</b> is natural: <b>în bibliotecă</b>."
+  },
+  { type:"build", id:"loc3",
+    promptEN:"Build: “I am here.”",
+    promptRO:"Construiește: «Sunt aici.»",
+    bank:["Sunt","aici",".","Nu","acolo","e"],
+    answerText:"Sunt aici.",
+    explainEN:"Basic location chunk: <b>Sunt aici.</b>"
+  },
+  { type:"build", id:"loc4",
+    promptEN:"Build: “I am not there.”",
+    promptRO:"Construiește: «Nu sunt acolo.»",
+    bank:["Nu","sunt","acolo",".","aici","e"],
+    answerText:"Nu sunt acolo.",
+    explainEN:"Negation + a fi: <b>Nu sunt …</b>"
+  },
+  { type:"build", id:"loc5",
+    promptEN:"Build: “I am at home.”",
+    promptRO:"Construiește: «Sunt acasă.»",
+    bank:["Sunt","acasă",".","Nu","la","în"],
+    answerText:"Sunt acasă.",
+    explainEN:"Home chunk: <b>Sunt acasă.</b>"
+  },
+
+  // --- Question words list (chapter) incl. cu cine / cu ce ---
+  { type:"mcq", id:"qword1",
+    promptEN:"Choose: “cu cine?” means…",
+    promptRO:"Alege: „cu cine?” înseamnă…",
+    choices:["with whom?","from where?","when?"],
+    answerIndex:0,
+    explainEN:"Question word + preposition: <b>cu cine?</b> = with whom?"
+  },
+  { type:"mcq", id:"qword2",
+    promptEN:"Choose: “de unde?” means…",
+    promptRO:"Alege: „de unde?” înseamnă…",
+    choices:["where?","from where?","who?"],
+    answerIndex:1,
+    explainEN:"<b>de unde?</b> = from where?"
+  },
+  { type:"mcq", id:"qword3",
+    promptEN:"Pick the best: “Who is he?”",
+    promptRO:"Alege: „Cine este el?”",
+    choices:["Cine este el?","Ce este el?","Când este el?"],
+    answerIndex:0,
+    explainEN:"Who = <b>cine</b>. What = <b>ce</b>."
+  },
+
+  // --- “Și eu…” = also/too ---
+  { type:"mcq", id:"si1",
+    promptEN:"In “Și eu sunt din România”, “Și” means…",
+    promptRO:"În „Și eu sunt din România”, „Și” înseamnă…",
+    choices:["and (only)","also/too","because"],
+    answerIndex:1,
+    explainEN:"In this pattern, <b>Și</b> can mean <b>also/too</b>."
+  },
+  { type:"build", id:"si2",
+    promptEN:"Build: “I am American too.”",
+    promptRO:"Construiește: «Și eu sunt american(ă).»",
+    bank:["Și","eu","sunt","american(ă).",".","român(ă).","Nu"],
+    answerText:"Și eu sunt american(ă).",
+    explainEN:"Chunk for ‘too’: <b>Și eu…</b>"
+  },
+
+  // --- Mini “chapter exercise A/B” style: change verb form to match subject ---
+  { type:"mcq", id:"agr1",
+    promptEN:"Choose the correct form: (voi) ___ aici în clasă.",
+    promptRO:"Alege forma corectă: (voi) ___ aici în clasă.",
+    choices:["sunt","sunteți","suntem"],
+    answerIndex:1,
+    explainEN:"voi = you (plural/informal) → <b>sunteți</b>."
+  },
+  { type:"mcq", id:"agr2",
+    promptEN:"Choose the correct form: (noi) ___ acasă dimineața.",
+    promptRO:"Alege forma corectă: (noi) ___ acasă dimineața.",
+    choices:["suntem","sunteți","sunt"],
+    answerIndex:0,
+    explainEN:"noi = we → <b>suntem</b>."
+  },
+
+  // --- Daily schedule (from “Program zilnic”) ---
+  { type:"mcq", id:"sch1",
+    promptEN:"Pick the best: “Usually, are you at the university in the morning?” (polite/plural)",
+    promptRO:"Alege varianta: „Sunteți de obicei la universitate dimineața?”",
+    choices:["Sunteți de obicei la universitate dimineața?","Ești de obicei la universitate dimineața?","Sînt de obicei la universitate dimineața?"],
+    answerIndex:0,
+    explainEN:"Polite/plural: <b>Sunteți…?</b>"
+  },
+  { type:"mcq", id:"sch2",
+    promptEN:"Pick the best negative answer to “Ești la curs dimineața?” (No, I’m at home.)",
+    promptRO:"Alege răspunsul: „Nu, nu sunt la curs dimineața, sunt acasă.”",
+    choices:["Nu, nu sunt la curs dimineața, sunt acasă.","Nu, nu ești la curs dimineața, sunt acasă.","Nu, nu am la curs dimineața, sunt acasă."],
+    answerIndex:0,
+    explainEN:"Answer mirrors subject + a fi: <b>Nu, nu sunt…</b>"
+  },
+
+  // --- Make questions (yes/no) ---
+  { type:"mcq", id:"yn1",
+    promptEN:"Pick the correct yes/no question (polite): “Are you American?”",
+    promptRO:"Alege întrebarea corectă (politicos): „Sunteți american?”",
+    choices:["Sunteți american?","Sunteți americană? (to a man)","Sunt american?"],
+    answerIndex:0,
+    explainEN:"Polite: <b>Sunteți…?</b> Choose gender appropriately when you know it."
+  },
+
+  // --- Free typing: short but controlled ---
+  { type:"cloze", id:"type1",
+    promptEN:"Type the missing word: „Sunt ___ Statele Unite.” (from)",
+    promptRO:"Scrie cuvântul lipsă: „Sunt ___ Statele Unite.”",
+    answerText:"din",
+    explainEN:"From = <b>din</b>."
+  },
+  { type:"cloze", id:"type2",
+    promptEN:"Type the missing word: „Cum ___ numiți, vă rog?”",
+    promptRO:"Scrie cuvântul lipsă: „Cum ___ numiți, vă rog?”",
+    answerText:"vă",
+    explainEN:"Polite address uses <b>vă</b>."
+  },
+];
+
+// ---------- State ----------
+function defaultState(){
+  return { idx:0, correct:0, attempts:0, legendHidden:false, itemStats:{} };
+}
+const state = loadState();
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return defaultState();
+    return { ...defaultState(), ...JSON.parse(raw) };
+  }catch{ return defaultState(); }
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+function normalize(s){ return String(s||"").replace(/\s+/g," ").trim(); }
+function eqLoose(user, ans){
+  return normalize(user).toLowerCase() === normalize(ans).toLowerCase();
+}
+function esc(s){
+  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+                  .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+function itemRecord(id){
+  if(!state.itemStats[id]) state.itemStats[id] = {attempts:0, correct:0, lastWrong:false};
+  return state.itemStats[id];
+}
+function markAttempt(id){
+  const r = itemRecord(id);
+  r.attempts++;
+  save();
+}
+function markResult(id, ok){
+  const r = itemRecord(id);
+  if(ok) r.correct++;
+  r.lastWrong = !ok;
+  save();
+}
+
+// ---------- UI wiring ----------
+const legendBtn = document.getElementById("toggleLegendBtn");
+const legendBox = document.getElementById("legendBox");
+legendBtn.onclick = ()=>{
+  state.legendHidden = !state.legendHidden;
+  save();
+  renderLegend();
+};
+document.getElementById("resetBtn").onclick = ()=>{
+  localStorage.removeItem(LS_KEY);
+  location.reload();
+};
+
+function renderLegend(){
+  legendBox.style.display = state.legendHidden ? "none" : "block";
+  legendBtn.textContent = state.legendHidden ? "Show legend" : "Hide legend";
+}
+
+function renderHeader(){
+  document.getElementById("counter").textContent = `${Math.min(state.idx, ITEMS.length)}/${ITEMS.length}`;
+  document.getElementById("progress").textContent =
+    `Progress: ${Math.min(state.idx, ITEMS.length)}/${ITEMS.length} • Correct: ${state.correct} • Attempts: ${state.attempts}`;
+}
+
+function renderFeedback(node, ok, html){
+  node.style.display = "block";
+  node.className = "feedback " + (ok ? "ok":"bad");
+  node.innerHTML = (ok ? "<b>✅ Correct.</b> " : "<b>❌ Not quite.</b> ") + html;
+}
+
+function addActions(container, {onContinue, onSkip}){
+  const actions = document.createElement("div");
+  actions.className = "actions";
+  const cont = document.createElement("button");
+  cont.textContent = "Continue";
+  cont.onclick = onContinue;
+  const skip = document.createElement("button");
+  skip.className = "secondary";
+  skip.textContent = "Skip";
+  skip.onclick = onSkip;
+  actions.appendChild(cont);
+  actions.appendChild(skip);
+  container.appendChild(actions);
+}
+
+function renderDone(){
+  const wrap = document.getElementById("practice");
+  wrap.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "q";
+  const missed = Object.entries(state.itemStats)
+    .filter(([_,r])=>r.lastWrong)
+    .map(([id,_])=>id);
+  box.innerHTML = `
+    <h3>Finished ✅</h3>
+    <div class="muted">Correct: <b>${state.correct}</b> • Attempts: <b>${state.attempts}</b></div>
+    <div class="hr"></div>
+    <div class="muted">
+      Next step: go back to your Chapter 1 dialogue and try reading it again.
+      If you want, I can also generate a <b>Chapter 1 practice page</b> (post-chapter) to match the book’s exercises.
+    </div>
+    <div class="hr"></div>
+    <div class="actions">
+      <button id="redoWrong">Redo wrong only</button>
+      <button class="secondary" id="redoAll">Redo all</button>
+    </div>
+  `;
+  wrap.appendChild(box);
+
+  box.querySelector("#redoAll").onclick = ()=>{
+    state.idx = 0; state.correct = 0; state.attempts = 0;
+    state.itemStats = {};
+    save();
+    renderAll();
+  };
+
+  box.querySelector("#redoWrong").onclick = ()=>{
+    // build a mini session: wrong items first, then stop
+    const wrongIds = Object.keys(state.itemStats).filter(id=>state.itemStats[id].lastWrong);
+    if(wrongIds.length===0){
+      alert("No wrong items recorded. Use 'Redo all' if you want a full run.");
+      return;
+    }
+    // create a temporary list
+    const wrongItems = ITEMS.filter(it => wrongIds.includes(it.id));
+    window.__TEMP_ITEMS = wrongItems;
+    state.idx = 0; state.correct = 0; state.attempts = 0;
+    save();
+    renderAll(true);
+  };
+}
+
+function getItems(useTemp){
+  return useTemp && Array.isArray(window.__TEMP_ITEMS) ? window.__TEMP_ITEMS : ITEMS;
+}
+
+// ---------- Render item types ----------
+function renderMCQ(item, wrap, itemsList){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="actions">
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const choicesWrap = box.querySelector("#choices");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+  let selected = null;
+
+  item.choices.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = c;
+    div.onclick = ()=>{
+      selected = i;
+      [...choicesWrap.children].forEach(x=>x.classList.remove("selected"));
+      div.classList.add("selected");
+      confirmBtn.disabled = false;
+    };
+    choicesWrap.appendChild(div);
+  });
+
+  addActions(box, {
+    onContinue: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); },
+    onSkip: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); }
+  });
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    markAttempt(item.id);
+
+    const ok = selected === item.answerIndex;
+    if(ok) state.correct++;
+    save();
+    markResult(item.id, ok);
+
+    const els = box.querySelectorAll(".choice");
+    els.forEach((node,i)=>{
+      node.style.pointerEvents = "none";
+      node.classList.remove("selected");
+      if(i === item.answerIndex) node.classList.add("correct");
+      if(i === selected && i !== item.answerIndex) node.classList.add("wrong");
+    });
+    renderFeedback(fb, ok, item.explainEN || "");
+    confirmBtn.disabled = true;
+  };
+}
+
+function renderTF(item, wrap, itemsList){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="choices" id="choices"></div>
+    <div class="actions">
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const choicesWrap = box.querySelector("#choices");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+  const choices = ["True / Adevărat", "False / Fals"];
+  let selected = null;
+
+  choices.forEach((c,i)=>{
+    const div = document.createElement("div");
+    div.className = "choice";
+    div.textContent = c;
+    div.onclick = ()=>{
+      selected = i;
+      [...choicesWrap.children].forEach(x=>x.classList.remove("selected"));
+      div.classList.add("selected");
+      confirmBtn.disabled = false;
+    };
+    choicesWrap.appendChild(div);
+  });
+
+  addActions(box, {
+    onContinue: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); },
+    onSkip: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); }
+  });
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    markAttempt(item.id);
+
+    const userBool = selected === 0;
+    const ok = userBool === item.answerBool;
+    if(ok) state.correct++;
+    save();
+    markResult(item.id, ok);
+
+    const els = box.querySelectorAll(".choice");
+    els.forEach((node,i)=>{
+      node.style.pointerEvents = "none";
+      node.classList.remove("selected");
+      if((item.answerBool && i===0) || (!item.answerBool && i===1)) node.classList.add("correct");
+      if(i === selected && ok===false) node.classList.add("wrong");
+    });
+
+    renderFeedback(fb, ok, item.explainEN || "");
+    confirmBtn.disabled = true;
+  };
+}
+
+function renderCloze(item, wrap, itemsList){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div style="margin-top:10px;">
+      <input id="inp" type="text" placeholder="Type the missing word…" />
+    </div>
+    <div class="actions">
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const inp = box.querySelector("#inp");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+
+  inp.oninput = ()=>{ confirmBtn.disabled = normalize(inp.value).length === 0; };
+  inp.onkeydown = (e)=>{ if(e.key==="Enter" && !confirmBtn.disabled) confirmBtn.click(); };
+  setTimeout(()=>inp.focus(), 40);
+
+  addActions(box, {
+    onContinue: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); },
+    onSkip: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); }
+  });
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    markAttempt(item.id);
+
+    const user = inp.value;
+    const ok = eqLoose(user, item.answerText);
+    if(ok) state.correct++;
+    save();
+    markResult(item.id, ok);
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Answer: <b>${esc(item.answerText)}</b>. You typed: <b>${esc(user)}</b>.`);
+
+    renderFeedback(fb, ok, extra);
+    confirmBtn.disabled = true;
+    inp.disabled = true;
+  };
+}
+
+function renderBuild(item, wrap, itemsList){
+  const box = document.createElement("div");
+  box.className = "q";
+  box.innerHTML = `
+    <h3>${esc(item.promptEN)}</h3>
+    <div class="muted"><b>Romanian:</b> ${esc(item.promptRO)}</div>
+    <div class="builder" id="bank"></div>
+    <div class="output" id="out">(click blocks to build)</div>
+    <div class="actions">
+      <button class="secondary" id="clear">Clear</button>
+      <button id="confirm" disabled>Confirm</button>
+    </div>
+    <div id="fb" style="display:none"></div>
+  `;
+  wrap.appendChild(box);
+
+  const bank = box.querySelector("#bank");
+  const out = box.querySelector("#out");
+  const clearBtn = box.querySelector("#clear");
+  const confirmBtn = box.querySelector("#confirm");
+  const fb = box.querySelector("#fb");
+
+  let built = "";
+
+  function refresh(){
+    out.textContent = built || "(empty)";
+    confirmBtn.disabled = normalize(built).length === 0;
+  }
+
+  item.bank.forEach(tok=>{
+    const chip = document.createElement("div");
+    chip.className = "chip";
+    chip.textContent = tok;
+    chip.onclick = ()=>{
+      if(built.length === 0) built = tok;
+      else if(tok === "." || tok === "?" || tok === "!" || tok.endsWith(","))
+        built = built.trimEnd() + tok;
+      else
+        built = built + " " + tok;
+      refresh();
+    };
+    bank.appendChild(chip);
+  });
+
+  clearBtn.onclick = ()=>{ built=""; fb.style.display="none"; refresh(); };
+
+  addActions(box, {
+    onContinue: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); },
+    onSkip: ()=>{ state.idx++; save(); renderAll(itemsList !== ITEMS); }
+  });
+
+  confirmBtn.onclick = ()=>{
+    state.attempts++; save();
+    markAttempt(item.id);
+
+    const ok = normalize(built) === normalize(item.answerText);
+    if(ok) state.correct++;
+    save();
+    markResult(item.id, ok);
+
+    const extra = ok
+      ? (item.explainEN || "")
+      : ((item.explainEN ? item.explainEN + " " : "") + `Target: <b>${esc(item.answerText)}</b>. You built: <b>${esc(built)}</b>.`);
+
+    renderFeedback(fb, ok, extra);
+    confirmBtn.disabled = true;
+    [...bank.children].forEach(c=>c.style.pointerEvents="none");
+  };
+
+  refresh();
+}
+
+// ---------- Main render ----------
+function renderAll(useTemp=false){
+  renderLegend();
+  const list = getItems(useTemp);
+  renderHeader();
+  document.getElementById("counter").textContent = `${Math.min(state.idx, list.length)}/${list.length}`;
+
+  const wrap = document.getElementById("practice");
+  wrap.innerHTML = "";
+
+  if(state.idx >= list.length){
+    renderDone();
+    return;
+  }
+
+  const item = list[state.idx];
+  if(item.type==="mcq") renderMCQ(item, wrap, list);
+  if(item.type==="tf") renderTF(item, wrap, list);
+  if(item.type==="cloze") renderCloze(item, wrap, list);
+  if(item.type==="build") renderBuild(item, wrap, list);
+}
+renderAll();
+</script>
+</body>
+</html>
