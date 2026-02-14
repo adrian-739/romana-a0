@@ -641,10 +641,9 @@ genderBtns.querySelectorAll("button").forEach(btn=>{
       </div>
     `;
     renderBadgeAndCounted();
-    renderStats(); renderWrong();
-
-    // move on after a short delay so user sees the answer (adjust if you want)
-    setTimeout(()=>{ pickNext(); }, 650);
+    renderStats(); 
+    // stay on this card; user presses Next manually
+// (Next button already calls pickNext())
   });
 });
 
