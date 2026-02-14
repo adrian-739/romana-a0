@@ -5,71 +5,116 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Romanian A0→A1 – 10 modules (building blocks)</title>
   <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { margin:0; background:#f6f7f9; color:#111; }
-    header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
-    header h1 { margin:0 0 6px 0; font-size:18px; }
-    header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
-    main { max-width:1200px; margin:0 auto; padding:14px; display:grid; grid-template-columns:360px 1fr; gap:14px; }
-    .card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
-    .pane { padding:12px; }
-    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
-    .muted { color:#555; font-size:13px; line-height:1.4; }
-    .big { font-size:16px; line-height:1.4; }
-    .hr { height:1px; background:#e6e8ee; margin:12px 0; }
+:root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-    .lessonBtn {
-      width:100%; text-align:left; border:1px solid #e6e8ee; background:#fff;
-      border-radius:10px; padding:10px; cursor:pointer;
-    }
-    .lessonBtn:hover { background:#fafbff; }
-    .lessonBtn.active { border-color:#111; }
-    .progressBar { margin-top:8px; height:6px; background:#f0f1f5; border-radius:999px; overflow:hidden; }
-    .progressBar > div { height:6px; background:#111; }
+body { margin:0; background:#f6f7f9; color:#111; }
 
-    .panelTitle { font-weight:800; font-size:14px; }
-    .legend {
-      border:1px solid #e6e8ee; border-radius:12px; padding:12px; background:#fbfcff;
-    }
-    .legend h3 { margin:0 0 8px 0; font-size:15px; }
-    .legend ul { margin:8px 0 0 18px; padding:0; }
-    .legend li { margin:6px 0; }
-    .legend code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fff; border:1px solid #e6e8ee; border-radius:7px; padding:1px 6px; }
+header { background:#fff; border-bottom:1px solid #e6e8ee; padding:16px 18px; }
+header h1 { margin:0 0 6px 0; font-size:18px; }
+header p { margin:0; color:#444; font-size:13px; line-height:1.35; }
 
-    .q { padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
-    .q h3 { margin:0 0 8px 0; font-size:15px; }
-    .choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
-    .choice { border:1px solid #e6e8ee; border-radius:10px; padding:10px; cursor:pointer; background:#fff; }
-    .choice:hover { background:#fafbff; }
-    .choice.selected { border-color:#111; }
-    .choice.correct { border-color:#0a7b34; background:#f0fff6; }
-    .choice.wrong { border-color:#b00020; background:#fff1f3; }
+main { max-width:1200px; margin:0 auto; padding:14px; display:grid; grid-template-columns:360px 1fr; gap:14px; }
 
-    input[type="text"]{
-      border:1px solid #e6e8ee; border-radius:10px; padding:10px; width:min(560px,100%); font-size:14px;
-    }
+.card { background:#fff; border:1px solid #e6e8ee; border-radius:12px; box-shadow:0 1px 0 rgba(0,0,0,.02); }
+.pane { padding:12px; }
+.row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+.tag { display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; }
+.muted { color:#555; font-size:13px; line-height:1.4; }
+.big { font-size:16px; line-height:1.4; }
+.hr { height:1px; background:#e6e8ee; margin:12px 0; }
 
-    .builder { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
-    .chip { border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; user-select:none; }
-    .chip:hover { background:#fafbff; }
-    .output { margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff; font-size:16px; min-height: 44px; }
+/* ---------- HIDE ROMANIAN ANSWER ---------- */
+.q .muted {
+  color: transparent;
+  position: relative;
+}
 
-    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-    button {
-      border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
-      padding:10px 12px; cursor:pointer;
-    }
-    button.secondary { background:#fff; color:#111; }
-    button:disabled { opacity:.5; cursor:not-allowed; }
+/* hint text */
+.q .muted::before {
+  content: "Choose the correct Romanian equivalent:";
+  color:#555;
+  position:absolute;
+  left:0;
+  top:0;
+}
 
-    .feedback { margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
-    .ok { border-color:#0a7b34; background:#f0fff6; }
-    .bad { border-color:#b00020; background:#fff1f3; }
+/* teacher mode: reveal answers */
+body.show-romanian .q .muted {
+  color:#555;
+}
 
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2px 6px; border: 1px solid #e6e8ee; border-radius: 7px; background:#fff; }
-    @media (max-width: 980px){ main{ grid-template-columns:1fr; } }
-  </style>
+body.show-romanian .q .muted::before {
+  display:none;
+}
+/* ------------------------------------------ */
+
+.lessonBtn {
+  width:100%; text-align:left; border:1px solid #e6e8ee; background:#fff;
+  border-radius:10px; padding:10px; cursor:pointer;
+}
+.lessonBtn:hover { background:#fafbff; }
+.lessonBtn.active { border-color:#111; }
+
+.progressBar { margin-top:8px; height:6px; background:#f0f1f5; border-radius:999px; overflow:hidden; }
+.progressBar > div { height:6px; background:#111; }
+
+.panelTitle { font-weight:800; font-size:14px; }
+
+.legend {
+  border:1px solid #e6e8ee; border-radius:12px; padding:12px; background:#fbfcff;
+}
+.legend h3 { margin:0 0 8px 0; font-size:15px; }
+.legend ul { margin:8px 0 0 18px; padding:0; }
+.legend li { margin:6px 0; }
+.legend code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#fff; border:1px solid #e6e8ee; border-radius:7px; padding:1px 6px; }
+
+.q { padding:12px; border:1px solid #e6e8ee; border-radius:12px; background:#fff; }
+.q h3 { margin:0 0 8px 0; font-size:15px; }
+
+.choices { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+
+.choice {
+  border:1px solid #e6e8ee;
+  border-radius:10px;
+  padding:10px;
+  cursor:pointer;
+  background:#fff;
+  color:#0b2d6b; /* Romanian answers dark blue */
+  font-weight:600;
+}
+
+.choice:hover { background:#fafbff; }
+.choice.selected { border-color:#111; }
+.choice.correct { border-color:#0a7b34; background:#f0fff6; }
+.choice.wrong { border-color:#b00020; background:#fff1f3; }
+
+input[type="text"]{
+  border:1px solid #e6e8ee; border-radius:10px; padding:10px; width:min(560px,100%); font-size:14px;
+}
+
+.builder { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.chip { border:1px solid #e6e8ee; border-radius:999px; padding:8px 10px; cursor:pointer; background:#fff; user-select:none; }
+.chip:hover { background:#fafbff; }
+
+.output { margin-top:10px; padding:10px; border-radius:12px; border:1px dashed #cfd5e2; background:#fbfcff; font-size:16px; min-height:44px; }
+
+.actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+
+button {
+  border:1px solid #e6e8ee; background:#111; color:#fff; border-radius:10px;
+  padding:10px 12px; cursor:pointer;
+}
+button.secondary { background:#fff; color:#111; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+
+.feedback { margin-top:10px; padding:10px; border-radius:10px; border:1px solid #e6e8ee; background:#fafbff; }
+.ok { border-color:#0a7b34; background:#f0fff6; }
+.bad { border-color:#b00020; background:#fff1f3; }
+
+.kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; padding:2px 6px; border:1px solid #e6e8ee; border-radius:7px; background:#fff; }
+
+@media (max-width: 980px){ main{ grid-template-columns:1fr; } }
+</style>
 </head>
 <body>
 <header>
@@ -864,3 +909,4 @@ renderAll();
 </script>
 </body>
 </html>
+
