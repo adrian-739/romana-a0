@@ -50,6 +50,14 @@
     .answer.show{ display:block; }
     .hint{ margin-top:8px; font-size:12px; color:#555; line-height:1.35; }
 
+    /* NEW: counted forms (un/o ... · doi/două ...) */
+    .counted{
+      margin-top:8px;
+      font-weight:900;
+      font-size:14px;
+      color:#0b2d6b; /* dark blue for the "counted" line */
+    }
+
     .list{
       max-height: 420px; overflow:auto; border:1px solid #e6e8ee; border-radius:12px; padding:10px; background:#fff;
       font-size:13px; line-height:1.35;
@@ -116,6 +124,10 @@
           <span id="badge" class="badge g-x">—</span>
           <span id="posTag" class="tagMini">—</span>
         </div>
+
+        <!-- NEW: counted forms line -->
+        <div id="countedLine" class="counted" style="display:none;"></div>
+
         <div id="microHint" class="hint"></div>
       </div>
 
@@ -161,7 +173,8 @@
     <b>How to add more words (no JSON)</b>
     <div class="muted" style="margin-top:6px;">
       Scroll in this file to <span class="kbd">const WORDS = [...]</span> and paste more entries in the same format.
-      Nouns need <span class="kbd">gender: "m|f|n"</span>. Others use <span class="kbd">gender: "x"</span>.
+      Nouns need <span class="kbd">gender: "m|f|n"</span> and ideally <span class="kbd">pl: "plural"</span>.
+      Others use <span class="kbd">gender: "x"</span>.
     </div>
   </aside>
 </main>
@@ -170,6 +183,7 @@
 /* ========= DATA =========
 pos: noun | verb | function | adj | adv | phrase
 gender: m | f | n | x
+For nouns, add: pl: "plural form" to enable counted forms (un/o ... · doi/două ...)
 */
 
 const PHRASES = [
@@ -272,89 +286,89 @@ const WORDS = [
   { ro:"a pune", en:"to put", pos:"verb", gender:"x" },
   { ro:"a sta", en:"to stay/sit", pos:"verb", gender:"x" },
 
-  // Time / frequency
+  // Time / frequency (nouns here now include plural forms)
   { ro:"acum", en:"now", pos:"adv", gender:"x" },
   { ro:"astăzi", en:"today", pos:"adv", gender:"x" },
   { ro:"mâine", en:"tomorrow", pos:"adv", gender:"x" },
   { ro:"ieri", en:"yesterday", pos:"adv", gender:"x" },
-  { ro:"dimineață", en:"morning", pos:"noun", gender:"f" },
-  { ro:"după-amiază", en:"afternoon", pos:"noun", gender:"f" },
-  { ro:"seară", en:"evening", pos:"noun", gender:"f" },
-  { ro:"noapte", en:"night", pos:"noun", gender:"f" },
+  { ro:"dimineață", en:"morning", pos:"noun", gender:"f", pl:"dimineți" },
+  { ro:"după-amiază", en:"afternoon", pos:"noun", gender:"f", pl:"după-amiezi" },
+  { ro:"seară", en:"evening", pos:"noun", gender:"f", pl:"seri" },
+  { ro:"noapte", en:"night", pos:"noun", gender:"f", pl:"nopți" },
   { ro:"uneori", en:"sometimes", pos:"adv", gender:"x" },
   { ro:"întotdeauna", en:"always", pos:"adv", gender:"x" },
   { ro:"niciodată", en:"never", pos:"adv", gender:"x" },
 
-  // Core nouns (M/F/N)
-  { ro:"om", en:"man/person", pos:"noun", gender:"m" },
-  { ro:"băiat", en:"boy", pos:"noun", gender:"m" },
-  { ro:"fată", en:"girl", pos:"noun", gender:"f" },
-  { ro:"femeie", en:"woman", pos:"noun", gender:"f" },
-  { ro:"bărbat", en:"man", pos:"noun", gender:"m" },
-  { ro:"copil", en:"child", pos:"noun", gender:"m" },
-  { ro:"prieten", en:"friend (male)", pos:"noun", gender:"m" },
-  { ro:"prietenă", en:"friend (female)", pos:"noun", gender:"f" },
-  { ro:"familie", en:"family", pos:"noun", gender:"f" },
-  { ro:"mamă", en:"mother", pos:"noun", gender:"f" },
-  { ro:"tată", en:"father", pos:"noun", gender:"m" },
-  { ro:"frate", en:"brother", pos:"noun", gender:"m" },
-  { ro:"soră", en:"sister", pos:"noun", gender:"f" },
+  // Core nouns (M/F/N) — NOW WITH pl: ...
+  { ro:"om", en:"man/person", pos:"noun", gender:"m", pl:"oameni" },
+  { ro:"băiat", en:"boy", pos:"noun", gender:"m", pl:"băieți" },
+  { ro:"fată", en:"girl", pos:"noun", gender:"f", pl:"fete" },
+  { ro:"femeie", en:"woman", pos:"noun", gender:"f", pl:"femei" },
+  { ro:"bărbat", en:"man", pos:"noun", gender:"m", pl:"bărbați" },
+  { ro:"copil", en:"child", pos:"noun", gender:"m", pl:"copii" },
+  { ro:"prieten", en:"friend (male)", pos:"noun", gender:"m", pl:"prieteni" },
+  { ro:"prietenă", en:"friend (female)", pos:"noun", gender:"f", pl:"prietene" },
+  { ro:"familie", en:"family", pos:"noun", gender:"f", pl:"familii" },
+  { ro:"mamă", en:"mother", pos:"noun", gender:"f", pl:"mame" },
+  { ro:"tată", en:"father", pos:"noun", gender:"m", pl:"tați" },
+  { ro:"frate", en:"brother", pos:"noun", gender:"m", pl:"frați" },
+  { ro:"soră", en:"sister", pos:"noun", gender:"f", pl:"surori" },
 
-  { ro:"casă", en:"house/home", pos:"noun", gender:"f" },
-  { ro:"apartament", en:"apartment", pos:"noun", gender:"n" },
-  { ro:"cameră", en:"room", pos:"noun", gender:"f" },
-  { ro:"ușă", en:"door", pos:"noun", gender:"f" },
-  { ro:"fereastră", en:"window", pos:"noun", gender:"f" },
-  { ro:"perete", en:"wall", pos:"noun", gender:"m" },
-  { ro:"pat", en:"bed", pos:"noun", gender:"n" },
-  { ro:"masă", en:"table", pos:"noun", gender:"f" },
-  { ro:"scaun", en:"chair", pos:"noun", gender:"n" },
-  { ro:"dulap", en:"wardrobe/cabinet", pos:"noun", gender:"n" },
-  { ro:"cheie", en:"key", pos:"noun", gender:"f" },
+  { ro:"casă", en:"house/home", pos:"noun", gender:"f", pl:"case" },
+  { ro:"apartament", en:"apartment", pos:"noun", gender:"n", pl:"apartamente" },
+  { ro:"cameră", en:"room", pos:"noun", gender:"f", pl:"camere" },
+  { ro:"ușă", en:"door", pos:"noun", gender:"f", pl:"uși" },
+  { ro:"fereastră", en:"window", pos:"noun", gender:"f", pl:"ferestre" },
+  { ro:"perete", en:"wall", pos:"noun", gender:"m", pl:"pereți" },
+  { ro:"pat", en:"bed", pos:"noun", gender:"n", pl:"paturi" },
+  { ro:"masă", en:"table", pos:"noun", gender:"f", pl:"mese" },
+  { ro:"scaun", en:"chair", pos:"noun", gender:"n", pl:"scaune" },
+  { ro:"dulap", en:"wardrobe/cabinet", pos:"noun", gender:"n", pl:"dulapuri" },
+  { ro:"cheie", en:"key", pos:"noun", gender:"f", pl:"chei" },
 
-  { ro:"oraș", en:"city", pos:"noun", gender:"n" },
-  { ro:"sat", en:"village", pos:"noun", gender:"n" },
-  { ro:"țară", en:"country", pos:"noun", gender:"f" },
-  { ro:"stradă", en:"street", pos:"noun", gender:"f" },
-  { ro:"parc", en:"park", pos:"noun", gender:"n" },
-  { ro:"magazin", en:"shop", pos:"noun", gender:"n" },
-  { ro:"piață", en:"market/square", pos:"noun", gender:"f" },
-  { ro:"restaurant", en:"restaurant", pos:"noun", gender:"n" },
-  { ro:"cafenea", en:"café", pos:"noun", gender:"f" },
-  { ro:"hotel", en:"hotel", pos:"noun", gender:"n" },
-  { ro:"gară", en:"train station", pos:"noun", gender:"f" },
-  { ro:"aeroport", en:"airport", pos:"noun", gender:"n" },
+  { ro:"oraș", en:"city", pos:"noun", gender:"n", pl:"orașe" },
+  { ro:"sat", en:"village", pos:"noun", gender:"n", pl:"sate" },
+  { ro:"țară", en:"country", pos:"noun", gender:"f", pl:"țări" },
+  { ro:"stradă", en:"street", pos:"noun", gender:"f", pl:"străzi" },
+  { ro:"parc", en:"park", pos:"noun", gender:"n", pl:"parcuri" },
+  { ro:"magazin", en:"shop", pos:"noun", gender:"n", pl:"magazine" },
+  { ro:"piață", en:"market/square", pos:"noun", gender:"f", pl:"piețe" },
+  { ro:"restaurant", en:"restaurant", pos:"noun", gender:"n", pl:"restaurante" },
+  { ro:"cafenea", en:"café", pos:"noun", gender:"f", pl:"cafenele" },
+  { ro:"hotel", en:"hotel", pos:"noun", gender:"n", pl:"hoteluri" },
+  { ro:"gară", en:"train station", pos:"noun", gender:"f", pl:"gări" },
+  { ro:"aeroport", en:"airport", pos:"noun", gender:"n", pl:"aeroporturi" },
 
-  { ro:"școală", en:"school", pos:"noun", gender:"f" },
-  { ro:"universitate", en:"university", pos:"noun", gender:"f" },
-  { ro:"clasă", en:"classroom/class", pos:"noun", gender:"f" },
-  { ro:"profesor", en:"teacher (male)", pos:"noun", gender:"m" },
-  { ro:"profesoară", en:"teacher (female)", pos:"noun", gender:"f" },
-  { ro:"student", en:"student (male)", pos:"noun", gender:"m" },
-  { ro:"studentă", en:"student (female)", pos:"noun", gender:"f" },
-  { ro:"carte", en:"book", pos:"noun", gender:"f" },
-  { ro:"caiet", en:"notebook", pos:"noun", gender:"n" },
-  { ro:"pix", en:"pen", pos:"noun", gender:"n" },
-  { ro:"creion", en:"pencil", pos:"noun", gender:"n" },
-  { ro:"dictionar", en:"dictionary", pos:"noun", gender:"n" },
+  { ro:"școală", en:"school", pos:"noun", gender:"f", pl:"școli" },
+  { ro:"universitate", en:"university", pos:"noun", gender:"f", pl:"universități" },
+  { ro:"clasă", en:"classroom/class", pos:"noun", gender:"f", pl:"clase" },
+  { ro:"profesor", en:"teacher (male)", pos:"noun", gender:"m", pl:"profesori" },
+  { ro:"profesoară", en:"teacher (female)", pos:"noun", gender:"f", pl:"profesoare" },
+  { ro:"student", en:"student", pos:"noun", gender:"m", pl:"studenți" },
+  { ro:"studentă", en:"student", pos:"noun", gender:"f", pl:"studente" },
+  { ro:"carte", en:"book", pos:"noun", gender:"f", pl:"cărți" },
+  { ro:"caiet", en:"notebook", pos:"noun", gender:"n", pl:"caiete" },
+  { ro:"pix", en:"pen", pos:"noun", gender:"n", pl:"pixuri" },
+  { ro:"creion", en:"pencil", pos:"noun", gender:"n", pl:"creioane" },
+  { ro:"dictionar", en:"dictionary", pos:"noun", gender:"n", pl:"dicționare" },
 
-  { ro:"apă", en:"water", pos:"noun", gender:"f" },
-  { ro:"ceai", en:"tea", pos:"noun", gender:"n" },
-  { ro:"cafea", en:"coffee", pos:"noun", gender:"f" },
-  { ro:"lapte", en:"milk", pos:"noun", gender:"n" },
-  { ro:"pâine", en:"bread", pos:"noun", gender:"f" },
-  { ro:"brânză", en:"cheese", pos:"noun", gender:"f" },
-  { ro:"supă", en:"soup", pos:"noun", gender:"f" },
-  { ro:"salată", en:"salad", pos:"noun", gender:"f" },
-  { ro:"carne", en:"meat", pos:"noun", gender:"f" },
-  { ro:"pește", en:"fish", pos:"noun", gender:"m" },
-  { ro:"măr", en:"apple", pos:"noun", gender:"n" },
-  { ro:"banană", en:"banana", pos:"noun", gender:"f" },
+  { ro:"apă", en:"water", pos:"noun", gender:"f", pl:"ape" },
+  { ro:"ceai", en:"tea", pos:"noun", gender:"n", pl:"ceaiuri" },
+  { ro:"cafea", en:"coffee", pos:"noun", gender:"f", pl:"cafele" },
+  { ro:"lapte", en:"milk", pos:"noun", gender:"n", pl:"lapte (invar.)" },
+  { ro:"pâine", en:"bread", pos:"noun", gender:"f", pl:"pâini" },
+  { ro:"brânză", en:"cheese", pos:"noun", gender:"f", pl:"brânzeturi" },
+  { ro:"supă", en:"soup", pos:"noun", gender:"f", pl:"supe" },
+  { ro:"salată", en:"salad", pos:"noun", gender:"f", pl:"salate" },
+  { ro:"carne", en:"meat", pos:"noun", gender:"f", pl:"cărnuri" },
+  { ro:"pește", en:"fish", pos:"noun", gender:"m", pl:"pești" },
+  { ro:"măr", en:"apple", pos:"noun", gender:"n", pl:"mere" },
+  { ro:"banană", en:"banana", pos:"noun", gender:"f", pl:"banane" },
 
-  { ro:"telefon", en:"phone", pos:"noun", gender:"n" },
-  { ro:"calculator", en:"computer", pos:"noun", gender:"n" },
-  { ro:"internet", en:"internet", pos:"noun", gender:"n" },
-  { ro:"mesaj", en:"message", pos:"noun", gender:"n" },
+  { ro:"telefon", en:"phone", pos:"noun", gender:"n", pl:"telefoane" },
+  { ro:"calculator", en:"computer", pos:"noun", gender:"n", pl:"calculatoare" },
+  { ro:"internet", en:"internet", pos:"noun", gender:"n", pl:"—" },
+  { ro:"mesaj", en:"message", pos:"noun", gender:"n", pl:"mesaje" },
 
   // Adjectives (a few)
   { ro:"bun", en:"good", pos:"adj", gender:"x" },
@@ -367,8 +381,6 @@ const WORDS = [
   { ro:"urât", en:"ugly", pos:"adj", gender:"x" },
   { ro:"cald", en:"warm/hot", pos:"adj", gender:"x" },
   { ro:"rece", en:"cold", pos:"adj", gender:"x" },
-
-  // You can keep extending WORDS with the same pattern.
 ];
 
 /* ========= ENGINE ========= */
@@ -377,6 +389,10 @@ let wrong = [];
 let total = 0, knew = 0, didnt = 0;
 let current = null;
 
+/* NEW: for Gender drill, hide gender until answered */
+let revealed = false;          // controls showing gender badge / counted in gender mode
+let genderAnswered = null;     // "m"|"f"|"n"|null
+
 const modeEl = document.getElementById("mode");
 const pickerEl = document.getElementById("picker");
 const filterEl = document.getElementById("filter");
@@ -384,6 +400,7 @@ const frontWord = document.getElementById("frontWord");
 const badge = document.getElementById("badge");
 const posTag = document.getElementById("posTag");
 const microHint = document.getElementById("microHint");
+const countedLine = document.getElementById("countedLine");
 const answerBox = document.getElementById("answerBox");
 const revealBtn = document.getElementById("reveal");
 const knowBtn = document.getElementById("know");
@@ -408,6 +425,19 @@ function genderLabel(g){
   if(g==="n") return "Neuter (N)";
   return "—";
 }
+
+/* NEW: build counted forms line: "un/o X · doi/două PL" */
+function countedForms(item){
+  if(!item || item.pos !== "noun") return "";
+  if(!item.gender) return "";
+  const g = item.gender; // m/f/n
+  const one = (g === "f") ? "o" : "un";      // neuter uses "un"
+  const two = (g === "m") ? "doi" : "două";  // neuter uses "două"
+  const pl = item.pl ? item.pl : "";
+  if(!pl) return `${one} ${item.ro}`;
+  return `${one} ${item.ro} · ${two} ${pl}`;
+}
+
 function applyFilter(items, filter){
   if(filter==="nouns") return items.filter(x => x.pos==="noun");
   if(filter==="verbs") return items.filter(x => x.pos==="verb");
@@ -425,9 +455,11 @@ function setFrontByMode(){
   if(mode==="en2ro"){
     frontWord.textContent = current.en || "(missing EN)";
   }else{
+    // IMPORTANT: do not add "(male)" etc to title; keep it clean
     frontWord.textContent = current.ro;
   }
 }
+
 function renderStats(){
   statsEl.textContent = `Seen ${total} • Knew ${knew} • Didn’t ${didnt} • Wrong ${wrong.length}`;
 }
@@ -441,21 +473,55 @@ function renderWrong(){
     return `<div><b>${x.ro}</b>${g} — ${x.en || "(missing EN)"}</div>`;
   }).join("");
 }
+
+/* NEW: show/hide badge + counted line depending on mode + revealed */
+function renderBadgeAndCounted(){
+  if(!current) return;
+  const mode = modeEl.value;
+  const isGenderMode = (mode === "gender");
+
+  // In gender mode: hide gender badge (and counted) until answered/revealed
+  const showGenderBadge = (!isGenderMode) || revealed;
+
+  // badge
+  if(current.pos === "noun" && showGenderBadge){
+    badge.className = `badge ${clsForGender(current.gender || "x")}`;
+    badge.textContent = genderLabel(current.gender);
+  }else{
+    badge.className = `badge g-x`;
+    badge.textContent = "—";
+  }
+
+  // pos tag always visible
+  posTag.textContent = `pos: ${current.pos}`;
+
+  // counted line: show for nouns, but in gender mode only after revealed/answered
+  const cf = countedForms(current);
+  const showCounted = (current.pos === "noun") && cf && ( (!isGenderMode) || revealed );
+  if(showCounted){
+    countedLine.style.display = "block";
+    countedLine.textContent = cf;
+  }else{
+    countedLine.style.display = "none";
+    countedLine.textContent = "";
+  }
+}
+
 function setCard(item){
   current = item;
+
+  // reset reveal state every new card
+  revealed = false;
+  genderAnswered = null;
+
   answerBox.className = "answer";
   answerBox.innerHTML = "";
 
-  badge.className = `badge ${clsForGender(item.gender || "x")}`;
-  if(item.pos==="noun") badge.textContent = genderLabel(item.gender);
-  else badge.textContent = "—";
+  setFrontByMode();
 
-  posTag.textContent = `pos: ${item.pos}`;
   microHint.textContent = modeEl.value==="gender"
     ? "Pick the gender: M / F / N."
     : (modeEl.value==="en2ro" ? "Guess Romanian, then reveal." : "Guess English, then reveal.");
-
-  setFrontByMode();
 
   // toggle controls
   if(modeEl.value==="gender"){
@@ -465,7 +531,10 @@ function setCard(item){
     genderBtns.style.display = "none";
     revealBtns.style.display = "flex";
   }
+
+  renderBadgeAndCounted();
 }
+
 function pickNext(){
   const mode = modeEl.value;
   const filter = filterEl.value;
@@ -483,6 +552,9 @@ function pickNext(){
   const pool = (picker==="weak" && weakPool.length) ? weakPool : base;
   setCard(pickFrom(pool) || pickFrom(base));
 }
+
+/* Reveal is used only in non-gender modes. Keeps "Romanian:" label but shows both sides.
+   (If you ever want to hide the word "Romanian:" you can remove that label.) */
 function reveal(){
   if(!current) return;
   answerBox.className = "answer show";
@@ -498,6 +570,7 @@ function reveal(){
                            </div>`;
   }
 }
+
 function mark(kind){
   if(!current) return;
   total += 1;
@@ -512,6 +585,7 @@ function mark(kind){
   renderStats(); renderWrong();
   pickNext();
 }
+
 function resetAll(){
   wrong = []; total=0; knew=0; didnt=0;
   renderStats(); renderWrong();
@@ -529,22 +603,48 @@ modeEl.addEventListener("change", ()=>{ pickNext(); });
 pickerEl.addEventListener("change", ()=>{ pickNext(); });
 filterEl.addEventListener("change", ()=>{ pickNext(); });
 
+/* Gender drill buttons:
+   - do NOT show badge before answer
+   - after click, set revealed=true and show correct gender + counted forms briefly
+   - then move on
+*/
 genderBtns.querySelectorAll("button").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     if(!current) return;
     if(current.pos!=="noun"){ pickNext(); return; }
+
     const pick = btn.getAttribute("data-g");
+    genderAnswered = pick;
+    revealed = true; // now we can show gender badge + counted forms
+
     total += 1;
-    if(pick === current.gender) knew += 1;
-    else{
+    const isCorrect = (pick === current.gender);
+
+    if(isCorrect){
+      knew += 1;
+    }else{
       didnt += 1;
       const key = `${current.ro}||${current.en||""}||${current.pos||""}`;
       if(!wrong.some(w => `${w.ro}||${w.en||""}||${w.pos||""}` === key)){
         wrong.push(current);
       }
     }
+
+    // show feedback (and reveal gender + counted forms) before auto-next
+    answerBox.className = "answer show";
+    const cf = countedForms(current);
+    answerBox.innerHTML = `
+      <div><b>${isCorrect ? "✅ Correct" : "❌ Not quite"}</b></div>
+      <div class="muted" style="margin-top:6px;">
+        Correct gender: <b>${genderLabel(current.gender)}</b>
+        ${cf ? `<div style="margin-top:6px;"><b>Counted:</b> ${cf}</div>` : ``}
+      </div>
+    `;
+    renderBadgeAndCounted();
     renderStats(); renderWrong();
-    pickNext();
+
+    // move on after a short delay so user sees the answer (adjust if you want)
+    setTimeout(()=>{ pickNext(); }, 650);
   });
 });
 
