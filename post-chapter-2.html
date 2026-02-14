@@ -5,54 +5,126 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Post-Chapter 2 — Practice</title>
   <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body{ margin:0; background:#f6f7f9; color:#111; }
-    header{ background:#fff; border-bottom:1px solid #e6e8ee; padding:16px; }
-    header h1{ margin:0 0 6px 0; font-size:18px; }
-    header p{ margin:0; color:#444; font-size:13px; line-height:1.35; }
-    main{ max-width:980px; margin:0 auto; padding:14px; }
-    .row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-    .pill{ display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; border:1px solid #e6e8ee; color:#333; background:#fff; }
-    .card{ background:#fff; border:1px solid #e6e8ee; border-radius:14px; padding:14px; margin-bottom:12px; }
-    button, a.btn{
-      border:1px solid #e6e8ee; border-radius:12px; padding:10px 12px; font-weight:800;
-      background:#111; color:#fff; cursor:pointer; text-decoration:none; display:inline-block;
-    }
-    button.secondary, a.btn.secondary{ background:#fff; color: #0b2d6b; }
-    button:disabled{ opacity:.45; cursor:not-allowed; }
-    .q-title{ font-weight:900; margin:0 0 6px 0; }
-    .q-meta{ color:#555; font-size:13px; line-height:1.35; margin:0 0 12px 0; }
-    .options{      
-        display:grid; grid-template-columns:1fr; gap:10px;
-        color: #0b2d6b !important; /* Dark color for Romanian text */
-        background-color: #FFFFFF; /* White background */
-}
-    .opt{
-      border:1px solid #e6e8ee; background:#fff; border-radius:12px; padding:12px;
-      cursor:pointer; text-align:left; font-weight:800;
-    }
-    .opt small{ display:block; margin-top:4px; color:#555; font-weight:600; }
-    .opt.selected{ outline:3px solid rgba(17,17,17,.12); border-color:#cfd5e2; }
-    .feedback{
-      margin-top:12px; padding:12px; border-radius:12px; border:1px solid #e6e8ee;
-      background:#fbfbfc; color:#111; font-size:14px; line-height:1.35;
-    }
-    .ok{ border-color:#bfe5c9; background:#f3fbf5; }
-    .bad{ border-color:#f1c1c1; background:#fff5f5; }
-    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .split{ display:grid; grid-template-columns:1.15fr .85fr; gap:12px; }
-    @media (max-width:900px){ .split{ grid-template-columns:1fr; } }
-    .legend{
-      border:1px dashed #e6e8ee; background:#fff; border-radius:14px; padding:12px;
-      color:#333; font-size:13px; line-height:1.35;
-    }
-    .legend h3{ margin:0 0 8px 0; font-size:14px; }
-    .legend .ro{ font-weight:900; }
-    .legend ul{ margin:8px 0 0 18px; }
-    .legend li{ margin:4px 0; }
-    .progress{ color:#333; font-size:13px; }
+:root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
 
-  </style>
+body{ margin:0; background:#f6f7f9; color:#111; }
+
+header{ background:#fff; border-bottom:1px solid #e6e8ee; padding:16px; }
+header h1{ margin:0 0 6px 0; font-size:18px; }
+header p{ margin:0; color:#444; font-size:13px; line-height:1.35; }
+
+main{ max-width:980px; margin:0 auto; padding:14px; }
+
+.row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+
+.pill{
+  display:inline-block; font-size:12px; padding:2px 8px;
+  border-radius:999px; border:1px solid #e6e8ee;
+  color:#333; background:#fff;
+}
+
+.card{
+  background:#fff; border:1px solid #e6e8ee;
+  border-radius:14px; padding:14px; margin-bottom:12px;
+}
+
+/* ===== DEFAULT BUTTONS (Confirm / Next) ===== */
+button, a.btn{
+  border:1px solid #e6e8ee;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:800;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+
+/* secondary buttons */
+button.secondary, a.btn.secondary{
+  background:#fff;
+  color:#111;
+}
+
+/* ===== ANSWER OPTIONS ===== */
+.options{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+.opt{
+  border:1px solid #e6e8ee;
+  background:#fff;
+  border-radius:12px;
+  padding:12px;
+  cursor:pointer;
+  text-align:left;
+  font-weight:800;
+
+  /* IMPORTANT: Romanian answers color */
+  color:#0b2d6b;
+}
+
+/* English explanation under option */
+.opt small{
+  display:block;
+  margin-top:4px;
+  color:#555;
+  font-weight:600;
+}
+
+.opt.selected{
+  outline:3px solid rgba(17,17,17,.12);
+  border-color:#cfd5e2;
+  background:#f3f6ff;
+}
+
+button:disabled{ opacity:.45; cursor:not-allowed; }
+
+.q-title{ font-weight:900; margin:0 0 6px 0; }
+.q-meta{ color:#555; font-size:13px; line-height:1.35; margin:0 0 12px 0; }
+
+.feedback{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #e6e8ee;
+  background:#fbfbfc;
+  color:#111;
+  font-size:14px;
+  line-height:1.35;
+}
+
+.ok{ border-color:#bfe5c9; background:#f3fbf5; }
+.bad{ border-color:#f1c1c1; background:#fff5f5; }
+
+.mono{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+  "Liberation Mono", "Courier New", monospace;
+}
+
+.split{ display:grid; grid-template-columns:1.15fr .85fr; gap:12px; }
+@media (max-width:900px){ .split{ grid-template-columns:1fr; } }
+
+.legend{
+  border:1px dashed #e6e8ee;
+  background:#fff;
+  border-radius:14px;
+  padding:12px;
+  color:#333;
+  font-size:13px;
+  line-height:1.35;
+}
+
+.legend h3{ margin:0 0 8px 0; font-size:14px; }
+.legend .ro{ font-weight:900; }
+.legend ul{ margin:8px 0 0 18px; }
+.legend li{ margin:4px 0; }
+
+.progress{ color:#333; font-size:13px; }
+</style>
 </head>
 <body>
 <header>
